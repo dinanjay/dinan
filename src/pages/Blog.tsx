@@ -34,7 +34,7 @@ const Blog = () => {
               placeholder="Search articles..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="brutal-input w-full pl-12 font-mono text-sm"
+              className="brutal-input w-full pl-14 font-mono text-sm"
             />
           </div>
           <div className="flex flex-wrap gap-2">
