@@ -66,23 +66,35 @@ const Blog = () => {
             <Link
               key={post.slug}
               to={`/blog/${post.slug}`}
-              className="brutal-card block p-6 group"
+              className="brutal-card block group overflow-hidden"
             >
-              <div className="flex flex-wrap gap-2 mb-2">
-                {post.tags.map((tag) => (
-                  <span key={tag} className="text-xs font-mono font-bold text-primary">
-                    {tag}
-                  </span>
-                ))}
-                <span className="text-xs text-muted-foreground font-mono ml-auto">{post.date}</span>
+              {post.coverImage && post.coverImage !== "/placeholder.svg" && (
+                <div className="h-48 border-b-[3px] border-foreground overflow-hidden">
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              <div className="p-6">
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {post.tags.map((tag) => (
+                    <span key={tag} className="text-xs font-mono font-bold text-primary">
+                      {tag}
+                    </span>
+                  ))}
+                  <span className="text-xs text-muted-foreground font-mono ml-auto">{post.date}</span>
+                </div>
+                <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                  {post.title}
+                </h2>
+                <p className="text-muted-foreground text-sm mb-3">{post.excerpt}</p>
+                <span className="font-mono text-sm font-bold text-primary flex items-center gap-1">
+                  Read more <ArrowRight size={14} />
+                </span>
               </div>
-              <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                {post.title}
-              </h2>
-              <p className="text-muted-foreground text-sm mb-3">{post.excerpt}</p>
-              <span className="font-mono text-sm font-bold text-primary flex items-center gap-1">
-                Read more <ArrowRight size={14} />
-              </span>
             </Link>
           ))}
           {filtered.length === 0 && (
