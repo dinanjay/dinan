@@ -191,6 +191,12 @@
 .marquee-container {
   width: 100%;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
 }
 
 .marquee-track {
