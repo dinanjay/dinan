@@ -51,55 +51,58 @@ const Navbar = () => {
   }, [lastScrollY, isOpen]);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background border-b-[3px] border-foreground transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="font-mono font-bold text-xl tracking-tight">
-            MECH<span className="text-primary">_</span>FOLIO
-          </Link>
+    <>
+      <nav className={`fixed top-0 left-0 right-0 z-50 bg-background border-b-[3px] border-foreground transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link to="/" className="font-mono font-bold text-xl tracking-tight">
+              MECH<span className="text-primary">_</span>FOLIO
+            </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-3 py-2 font-mono text-sm font-bold transition-colors hover:text-primary ${
-                  location.pathname === link.path ? "text-primary" : "text-foreground"
-                }`}
+            {/* Desktop Links */}
+            <div className="hidden md:flex items-center gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`px-3 py-2 font-mono text-sm font-bold transition-colors hover:text-primary ${
+                    location.pathname === link.path ? "text-primary" : "text-foreground"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <button
+                onClick={() => setIsDark(!isDark)}
+                className="brutal-border brutal-shadow p-2 bg-background transition-all duration-150 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+                aria-label="Toggle dark mode"
               >
-                {link.label}
-              </Link>
-            ))}
+                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
             <button
-              onClick={() => setIsDark(!isDark)}
-              className="brutal-border brutal-shadow p-2 bg-background transition-all duration-150 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
-              aria-label="Toggle dark mode"
+              className="md:hidden brutal-border p-2 bg-background"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle menu"
             >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden brutal-border p-2 bg-background"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle menu"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay - sibling of nav for independent stacking context */}
       <div
-        className={`md:hidden fixed inset-0 top-[67px] bg-background z-40 border-t-[3px] border-foreground transition-all duration-300 ${
+        className={`md:hidden fixed inset-0 top-[67px] z-50 border-t-[3px] border-foreground transition-all duration-300 ${
           isOpen
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
         style={{
+          backgroundColor: isDark ? 'hsl(0, 0%, 7%)' : 'hsl(60, 11%, 95%)',
           backgroundImage: isDark
             ? 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)'
             : 'linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)',
@@ -127,7 +130,7 @@ const Navbar = () => {
           ))}
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 
