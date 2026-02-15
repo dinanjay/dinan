@@ -75,7 +75,7 @@ const Index = () => {
       </section>
 
       {/* Tech Stack Marquee */}
-      <section className="border-t-[3px] border-foreground overflow-hidden py-6">
+      <section className="border-t-[3px] border-foreground overflow-hidden py-6 mt-8 lg:mt-0">
         <div className="marquee-container">
           <div className="marquee-track">
             {[...techStack, ...techStack].map((tech, i) => (
