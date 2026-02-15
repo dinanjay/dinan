@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Download } from "lucide-react";
+import { Menu, X, Download, Sun, Moon } from "lucide-react";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -11,7 +11,23 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== "undefined") {
+      return document.documentElement.classList.contains("dark");
+    }
+    return false;
+  });
   const location = useLocation();
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [isDark]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b-[3px] border-foreground">
@@ -35,9 +51,16 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className="brutal-border brutal-shadow p-2 bg-background transition-all duration-150 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             <a
               href="#"
-              className="brutal-btn ml-3 flex items-center gap-2 text-sm !py-2 !px-4"
+              className="brutal-btn flex items-center gap-2 text-sm !py-2 !px-4"
               onClick={(e) => e.preventDefault()}
             >
               <Download size={16} />
