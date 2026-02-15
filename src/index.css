@@ -191,37 +191,12 @@
 .marquee-container {
   width: 100%;
   overflow: hidden;
-  position: relative;
-  cursor: pointer;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
 
 .marquee-container:hover .marquee-track {
   animation-play-state: paused;
-}
-
-.marquee-container::after {
-  content: '⏸ PAUSED';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: 'Space Mono', monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: hsl(var(--primary-foreground));
-  background: hsl(var(--primary));
-  border: 3px solid hsl(var(--foreground));
-  padding: 0.25rem 0.75rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 10;
-}
-
-.marquee-container:hover::after {
-  opacity: 1;
 }
 
 .marquee-track {
