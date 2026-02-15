@@ -1,43 +1,25 @@
 
+# Fix Overflowing Map and Blog Cards on Landing Page
 
-# Add Latest Blog Posts and Featured Projects Sections to Homepage
+## Problem
+The Journey Map and Latest Blog Posts sections overflow horizontally beyond their containers. The `brutal-shadow` (4px offset) and hover shadow (8px offset) on cards, combined with the 3px borders, extend beyond the parent containers, causing horizontal scrollbar or visual overflow.
 
-## Summary
-Add two new sections to the homepage below the Journey Timeline: a "Featured Projects" grid showing the 3 latest projects, and a "Latest Posts" section showing the 3 most recent blog posts. Both sections follow the existing Neo-Brutalist styling and include "View All" links to their respective pages.
+## Fix
 
-## Layout Order (top to bottom)
-1. Hero (existing)
-2. Tech Stack Marquee (existing)
-3. Journey Timeline (existing)
-4. **Featured Projects (new)** -- 3-column grid on desktop
-5. **Latest Blog Posts (new)** -- stacked card list
+### 1. Journey section (`src/pages/Index.tsx`, line 96)
+Add `overflow-hidden` to the Journey section's container so the map and timeline grid don't bleed out.
 
-## Design Details
+### 2. Blog posts section (`src/pages/Index.tsx`, line 163)
+Add padding to the blog posts wrapper (`space-y-6 max-w-4xl`) to accommodate the brutal-shadow offsets on hover (8px). This prevents the shadow from being clipped or overflowing.
 
-### Featured Projects Section
-- Section header: "FEATURED PROJECTS" badge in the same brutal style as "MY JOURNEY"
-- Display the first 3 projects from the existing `projects` data array
-- Each card reuses the same card layout from the Projects page (thumbnail placeholder, title, description, tags, source/demo links)
-- "View All Projects" link at the bottom using `brutal-btn-outline` style, linking to `/projects`
-- Separated from the section above with a `border-t-[3px]` divider
-
-### Latest Blog Posts Section
-- Section header: "LATEST POSTS" badge
-- Display the first 3 blog posts from the existing `blogPosts` data
-- Each post rendered as a clickable `brutal-card` with tags, date, title, excerpt, and "Read more" arrow (same layout as the Blog page cards)
-- "View All Posts" link at the bottom linking to `/blog`
-- Separated with a `border-t-[3px]` divider
+### 3. Global overflow fix (`src/index.css`)
+Add `overflow-x: hidden` on the `body` or the `main` element to prevent any horizontal scrollbar from appearing site-wide due to shadows/borders.
 
 ## Technical Details
 
-### Modified File: `src/pages/Index.tsx`
-- Import `projects` from `@/data/projects`
-- Import `blogPosts` from `@/data/blog`
-- Import additional icons: `ExternalLink` from lucide-react
-- Add Featured Projects section after Journey Timeline using `projects.slice(0, 3)` in a responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`)
-- Add Latest Posts section after projects using `blogPosts.slice(0, 3)` as stacked cards
-- Both sections use `max-w-7xl` container consistent with other sections
+### File: `src/pages/Index.tsx`
+- **Line 96**: Add `overflow-hidden` to the Journey section's inner `div`
+- **Line 163**: Add `pb-2 pr-2` (or similar small padding) to the blog posts container to give room for shadows
 
-### No new files or dependencies needed
-All data and styling utilities already exist.
-
+### File: `src/index.css`
+- Add `overflow-x: hidden` to the `body` rule to prevent horizontal scroll caused by shadow offsets across all sections
