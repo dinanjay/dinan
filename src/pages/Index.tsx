@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { Link } from "react-router-dom";
 import { Github, Linkedin, ArrowRight, ExternalLink, Code, Cpu, Wrench, Cog, Bot, CircuitBoard, Database, Terminal, Wifi } from "lucide-react";
 import { timelineEntries } from "@/data/experience";
