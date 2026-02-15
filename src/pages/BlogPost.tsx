@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { blogPosts } from "@/data/blog";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -29,6 +30,16 @@ const BlogPost = () => {
           <ArrowLeft size={14} /> Back to Blog
         </Link>
 
+        {post.coverImage && post.coverImage !== "/placeholder.svg" && (
+          <div className="brutal-border mb-8 overflow-hidden">
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              className="w-full h-64 sm:h-80 object-cover"
+            />
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-2 mb-4">
           {post.tags.map((tag) => (
             <span key={tag} className="brutal-border px-2 py-0.5 text-xs font-mono font-bold bg-primary text-primary-foreground">
@@ -40,21 +51,8 @@ const BlogPost = () => {
 
         <h1 className="text-3xl sm:text-4xl font-bold mb-8">{post.title}</h1>
 
-        <div className="prose prose-lg max-w-none">
-          {post.content.split("\n\n").map((paragraph, i) => {
-            if (paragraph.startsWith("## ")) {
-              return (
-                <h2 key={i} className="text-2xl font-bold mt-10 mb-4">
-                  {paragraph.replace("## ", "")}
-                </h2>
-              );
-            }
-            return (
-              <p key={i} className="text-muted-foreground leading-relaxed mb-4">
-                {paragraph}
-              </p>
-            );
-          })}
+        <div className="prose-brutal">
+          <MarkdownRenderer content={post.content} />
         </div>
       </article>
     </main>
