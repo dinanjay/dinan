@@ -17,10 +17,32 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
+    
+    const trimmedName = form.name.trim();
+    const trimmedEmail = form.email.trim();
+    const trimmedMessage = form.message.trim();
+
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
       toast({ title: "Error", description: "Please fill in all fields.", variant: "destructive" });
       return;
     }
+
+    if (trimmedName.length > 100) {
+      toast({ title: "Error", description: "Name must be less than 100 characters.", variant: "destructive" });
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail) || trimmedEmail.length > 255) {
+      toast({ title: "Error", description: "Please enter a valid email address.", variant: "destructive" });
+      return;
+    }
+
+    if (trimmedMessage.length > 1000) {
+      toast({ title: "Error", description: "Message must be less than 1000 characters.", variant: "destructive" });
+      return;
+    }
+
     toast({ title: "Message Sent!", description: "Thanks for reaching out. I'll get back to you soon." });
     setForm({ name: "", email: "", message: "" });
   };
@@ -67,6 +89,7 @@ const Contact = () => {
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="Your name"
+              maxLength={100}
               className="brutal-input w-full"
             />
           </div>
@@ -77,6 +100,7 @@ const Contact = () => {
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               placeholder="your@email.com"
+              maxLength={255}
               className="brutal-input w-full"
             />
           </div>
@@ -87,6 +111,7 @@ const Contact = () => {
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               placeholder="What's on your mind?"
               rows={6}
+              maxLength={1000}
               className="brutal-input w-full resize-none"
             />
           </div>
