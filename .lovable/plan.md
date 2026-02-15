@@ -1,25 +1,28 @@
 
-# Fix Overflowing Map and Blog Cards on Landing Page
 
-## Problem
-The Journey Map and Latest Blog Posts sections overflow horizontally beyond their containers. The `brutal-shadow` (4px offset) and hover shadow (8px offset) on cards, combined with the 3px borders, extend beyond the parent containers, causing horizontal scrollbar or visual overflow.
+# Make Dynamic Navbar (Hide on Scroll Down, Show on Scroll Up)
 
-## Fix
+## Summary
+Add scroll-aware behavior to the navbar so it hides when the user scrolls down and reappears when scrolling up. This is a common "smart navbar" pattern that gives more screen real estate while keeping navigation easily accessible.
 
-### 1. Journey section (`src/pages/Index.tsx`, line 96)
-Add `overflow-hidden` to the Journey section's container so the map and timeline grid don't bleed out.
-
-### 2. Blog posts section (`src/pages/Index.tsx`, line 163)
-Add padding to the blog posts wrapper (`space-y-6 max-w-4xl`) to accommodate the brutal-shadow offsets on hover (8px). This prevents the shadow from being clipped or overflowing.
-
-### 3. Global overflow fix (`src/index.css`)
-Add `overflow-x: hidden` on the `body` or the `main` element to prevent any horizontal scrollbar from appearing site-wide due to shadows/borders.
+## Behavior
+- **Scroll down**: Navbar slides up and hides
+- **Scroll up**: Navbar slides back into view
+- **At top of page**: Navbar always visible
+- **Mobile menu open**: Navbar stays visible (don't hide while menu is open)
 
 ## Technical Details
 
-### File: `src/pages/Index.tsx`
-- **Line 96**: Add `overflow-hidden` to the Journey section's inner `div`
-- **Line 163**: Add `pb-2 pr-2` (or similar small padding) to the blog posts container to give room for shadows
+### File: `src/components/Navbar.tsx`
+- Add two state variables: `lastScrollY` (tracks previous scroll position) and `isVisible` (controls navbar visibility)
+- Add a `useEffect` with a scroll event listener that compares `window.scrollY` to `lastScrollY`:
+  - If scrolling down and past a threshold (~50px), set `isVisible = false`
+  - If scrolling up, set `isVisible = true`
+  - If at the very top (scrollY < 10), always show
+  - Skip hiding if mobile menu is open
+- Apply a CSS transition on the `<nav>` element using `translate-y`: `-translate-y-full` when hidden, `translate-y-0` when visible
+- Add `transition-transform duration-300` for smooth animation
+- Optionally add a subtle background blur/opacity change when navbar is floating (not at top)
 
-### File: `src/index.css`
-- Add `overflow-x: hidden` to the `body` rule to prevent horizontal scroll caused by shadow offsets across all sections
+### No new files or dependencies needed
+
