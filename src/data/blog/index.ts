@@ -1,12 +1,5 @@
-export interface BlogPost {
-  slug: string;
-  title: string;
-  date: string;
-  tags: string[];
-  excerpt: string;
-  coverImage: string;
-  content: string;
-}
+import type { BlogPost } from "./types";
+export type { BlogPost };
 
 export const blogTags = ["Robotics", "Embedded Systems", "AI", "CAD", "General"] as const;
 

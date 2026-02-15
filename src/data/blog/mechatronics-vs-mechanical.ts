@@ -1,5 +1,5 @@
 import mechatronicsImg from "@/assets/images/blog/mechatronics-vs-mechanical.jpg";
-import type { BlogPost } from "./index";
+import type { BlogPost } from "./types";
 
 export const mechatronicsVsMechanicalPost: BlogPost = {
   slug: "mechatronics-vs-mechanical",
