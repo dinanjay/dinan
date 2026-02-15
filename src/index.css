@@ -162,6 +162,31 @@
   }
 }
 
+/* Neo-Brutalist Scrollbar */
+.brutal-scrollbar::-webkit-scrollbar {
+  width: 14px;
+}
+.brutal-scrollbar::-webkit-scrollbar-track {
+  background: hsl(var(--secondary));
+  border-left: 3px solid hsl(var(--foreground));
+}
+.brutal-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border: 3px solid hsl(var(--foreground));
+}
+.brutal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
+.brutal-scrollbar {
+  scrollbar-color: hsl(var(--primary)) hsl(var(--secondary));
+  scrollbar-width: auto;
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  font-family: 'Space Mono', monospace;
+}
+
 /* Marquee */
 .marquee-container {
   width: 100%;

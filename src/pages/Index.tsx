@@ -1,5 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Github, Linkedin, ArrowRight, Code, Cpu, Wrench, Cog, Bot, CircuitBoard, Database, Terminal, Wifi } from "lucide-react";
+import { timelineEntries } from "@/data/experience";
+import JourneyTimeline from "@/components/JourneyTimeline";
+import JourneyMap from "@/components/JourneyMap";
 
 const techStack = [
   { name: "Python", icon: Code },
@@ -14,6 +18,8 @@ const techStack = [
 ];
 
 const Index = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <main className="pt-20">
       {/* Hero */}
@@ -79,6 +85,27 @@ const Index = () => {
                 <span className="font-mono font-bold text-sm whitespace-nowrap">{tech.name}</span>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Journey Timeline */}
+      <section className="border-t-[3px] border-foreground py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-8 bg-primary text-primary-foreground">
+            <span className="font-mono text-sm font-bold">MY JOURNEY</span>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6">
+            <JourneyTimeline
+              entries={timelineEntries}
+              activeIndex={activeIndex}
+              onSelect={setActiveIndex}
+            />
+            <JourneyMap
+              entries={timelineEntries}
+              activeIndex={activeIndex}
+              onMarkerClick={setActiveIndex}
+            />
           </div>
         </div>
       </section>
