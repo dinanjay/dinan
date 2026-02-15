@@ -17,6 +17,8 @@ const Navbar = () => {
     }
     return false;
   });
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
@@ -29,8 +31,27 @@ const Navbar = () => {
     }
   }, [isDark]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < 10) {
+        setIsVisible(true);
+      } else if (isOpen) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        setIsVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY, isOpen]);
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b-[3px] border-foreground">
+    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background border-b-[3px] border-foreground transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
