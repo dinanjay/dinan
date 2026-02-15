@@ -1,3 +1,9 @@
+import pidTuningImg from "@/assets/images/blog/pid-tuning.jpg";
+import ros2NavigationImg from "@/assets/images/blog/ros2-navigation.jpg";
+import kicadPcbImg from "@/assets/images/blog/kicad-pcb.jpg";
+import solidworksFeaImg from "@/assets/images/blog/solidworks-fea.jpg";
+import mechatronicsImg from "@/assets/images/blog/mechatronics-vs-mechanical.jpg";
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -17,7 +23,7 @@ export const blogPosts: BlogPost[] = [
     date: "2025-12-15",
     tags: ["Robotics", "Embedded Systems"],
     excerpt: "How I tuned a PID controller for my line-following robot and what I learned about control theory in practice.",
-    coverImage: "/placeholder.svg",
+    coverImage: pidTuningImg,
     content: `## The Challenge
 
 Building a line-following robot sounds simple until you actually try to make it fast and reliable. My first attempt used a basic bang-bang controller — the robot oscillated wildly and flew off the track at every curve.
@@ -63,7 +69,7 @@ Key takeaways:
     date: "2025-11-28",
     tags: ["Robotics", "AI"],
     excerpt: "A step-by-step walkthrough of setting up autonomous navigation with ROS2 Nav2 on a TurtleBot3.",
-    coverImage: "/placeholder.svg",
+    coverImage: ros2NavigationImg,
     content: `## Why ROS2?
 
 ROS2 (Robot Operating System 2) is the de facto standard for robotics middleware. If you're serious about robotics engineering, learning ROS2 is **non-negotiable**.
@@ -108,7 +114,7 @@ ROS2 has a steep learning curve, but the payoff is enormous. Once you understand
     date: "2025-10-14",
     tags: ["Embedded Systems", "CAD"],
     excerpt: "The complete journey of designing, ordering, and assembling a custom motor driver PCB using KiCad 8.",
-    coverImage: "/placeholder.svg",
+    coverImage: kicadPcbImg,
     content: `## Why Custom PCBs?
 
 Breadboards are great for prototyping, but they fail at higher currents and frequencies. For my robot's motor drivers, I needed something **reliable**.
@@ -153,7 +159,7 @@ Soldering SMD components was challenging but rewarding. The board worked on the 
     date: "2025-09-20",
     tags: ["CAD", "Robotics"],
     excerpt: "How finite element analysis helped me optimize a compliant gripper design before 3D printing.",
-    coverImage: "/placeholder.svg",
+    coverImage: solidworksFeaImg,
     content: `## The Problem
 
 Traditional rigid grippers struggle with irregularly shaped objects. **Compliant mechanisms** use material flexibility instead of joints, but designing them requires careful stress analysis.
@@ -192,7 +198,7 @@ The optimized gripper could handle **500g loads** without permanent deformation,
     date: "2025-08-05",
     tags: ["General"],
     excerpt: "My perspective on choosing Mechatronics over traditional Mechanical Engineering and what it means for your career.",
-    coverImage: "/placeholder.svg",
+    coverImage: mechatronicsImg,
     content: `## The Modern Engineer
 
 The line between hardware and software is blurring. Modern products — from drones to surgical robots — require engineers who understand **both domains**.
