@@ -1,5 +1,5 @@
 import kicadPcbImg from "@/assets/images/blog/kicad-pcb.jpg";
-import type { BlogPost } from "./index";
+import type { BlogPost } from "./types";
 
 export const kicadFirstPcbPost: BlogPost = {
   slug: "kicad-first-pcb",

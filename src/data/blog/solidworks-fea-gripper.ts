@@ -1,5 +1,5 @@
 import solidworksFeaImg from "@/assets/images/blog/solidworks-fea.jpg";
-import type { BlogPost } from "./index";
+import type { BlogPost } from "./types";
 
 export const solidworksFeaGripperPost: BlogPost = {
   slug: "solidworks-fea-gripper",

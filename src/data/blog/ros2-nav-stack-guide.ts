@@ -1,5 +1,5 @@
 import ros2NavigationImg from "@/assets/images/blog/ros2-navigation.jpg";
-import type { BlogPost } from "./index";
+import type { BlogPost } from "./types";
 
 export const ros2NavStackPost: BlogPost = {
   slug: "ros2-nav-stack-guide",

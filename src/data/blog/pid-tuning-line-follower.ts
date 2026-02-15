@@ -1,5 +1,5 @@
 import pidTuningImg from "@/assets/images/blog/pid-tuning.jpg";
-import type { BlogPost } from "./index";
+import type { BlogPost } from "./types";
 
 export const pidTuningPost: BlogPost = {
   slug: "pid-tuning-line-follower",
