@@ -1,0 +1,48 @@
+import ros2NavigationImg from "@/assets/images/blog/ros2-navigation.jpg";
+import type { BlogPost } from "./index";
+
+export const ros2NavStackPost: BlogPost = {
+  slug: "ros2-nav-stack-guide",
+  title: "Getting Started with ROS2 Navigation: A Practical Guide",
+  date: "2025-11-28",
+  tags: ["Robotics", "AI"],
+  excerpt: "A step-by-step walkthrough of setting up autonomous navigation with ROS2 Nav2 on a TurtleBot3.",
+  coverImage: ros2NavigationImg,
+  content: `## Why ROS2?
+
+ROS2 (Robot Operating System 2) is the de facto standard for robotics middleware. If you're serious about robotics engineering, learning ROS2 is **non-negotiable**.
+
+## Setting Up the Environment
+
+I used Ubuntu 22.04 with ROS2 Humble. The Nav2 stack provides everything you need:
+
+- SLAM (Simultaneous Localization and Mapping)
+- Path planning
+- Obstacle avoidance
+- Behavior trees
+
+\`\`\`bash
+sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup
+sudo apt install ros-humble-slam-toolbox
+\`\`\`
+
+## SLAM Mapping
+
+The first step is creating a map of your environment. I used \`slam_toolbox\` with a LIDAR sensor to generate an occupancy grid map of our lab.
+
+\`\`\`bash
+ros2 launch slam_toolbox online_async_launch.py
+\`\`\`
+
+## Path Planning
+
+Nav2 uses a **behavior tree architecture** for navigation. The default planner (NavFn) works well for most cases, but I switched to SMAC Planner for better performance in tight spaces.
+
+## Key Takeaways
+
+ROS2 has a steep learning curve, but the payoff is enormous. Once you understand the **node-topic-service** architecture, everything clicks into place.
+
+1. Start with tutorials on the official ROS2 docs
+2. Use simulation (Gazebo) before real hardware
+3. Join the ROS Discourse community for help`,
+};
