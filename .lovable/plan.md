@@ -1,35 +1,27 @@
 
 
-# Add Dark Mode Toggle to Mobile Menu
+# Fix Leaflet Map Z-Index
 
-## Overview
-Add the sun/moon dark mode toggle button to the mobile hamburger menu so users on mobile can switch themes without needing the desktop navbar.
+## Problem
+The Leaflet map's internal elements use high z-index values (tile pane: 200, controls: 1000+), causing them to render on top of the navbar (z-50) and potentially the mobile overlay.
 
-## Changes
+## Fix
 
-### File: `src/components/Navbar.tsx`
+### File: `src/components/JourneyMap.tsx`
 
-Add a dark mode toggle button below the navigation links inside the mobile overlay's flex column (after the `navLinks.map` block, around line 129).
+Add `z-0` (or a low explicit z-index) to the map's wrapper div so the entire map and its internal z-index hierarchy are contained within a low stacking context.
 
-- Reuse the same `onClick={() => setIsDark(!isDark)}` handler
-- Style it consistently with the desktop toggle (brutal-border, brutal-shadow)
-- Add the same staggered animation delay as the nav links (using index `navLinks.length` for timing)
+**Change the wrapper div (line 76):**
 
+From:
 ```tsx
-<button
-  onClick={() => setIsDark(!isDark)}
-  className="brutal-border brutal-shadow p-3 bg-background transition-all duration-150 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
-  aria-label="Toggle dark mode"
-  style={{
-    transitionDelay: isOpen ? `${navLinks.length * 75}ms` : "0ms",
-    opacity: isOpen ? 1 : 0,
-    transform: isOpen ? "translateY(0)" : "translateY(10px)",
-    transitionDuration: "300ms",
-  }}
->
-  {isDark ? <Sun size={24} /> : <Moon size={24} />}
-</button>
+<div className="brutal-border h-[500px] overflow-hidden">
 ```
 
-This gives it the same staggered fade-in animation as the nav links, appearing last in the sequence.
+To:
+```tsx
+<div className="brutal-border h-[500px] overflow-hidden relative z-0">
+```
+
+Adding `relative z-0` creates a new stacking context for the map container. All of Leaflet's internal z-index values (200, 400, 1000, etc.) will be scoped within this `z-0` context, so the map will never overlap the navbar's `z-50`.
 
