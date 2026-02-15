@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import PageTransition from "@/components/PageTransition";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
@@ -40,6 +41,7 @@ const App = () => (
       <BrowserRouter>
         <Navbar />
         <AnimatedRoutes />
+        <Footer />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
