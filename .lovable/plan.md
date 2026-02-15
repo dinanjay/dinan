@@ -1,63 +1,34 @@
-
-
-# Add Journey Timeline Section with Neo-Brutalist Scrolling
+# Add Fade/Blur Effect to Tech Stack Marquee
 
 ## Summary
-Create the Journey Timeline section on the landing page (below the tech stack marquee) with a split layout: scrollable timeline on the left and an interactive Leaflet map on the right. The timeline scroll area will use custom Neo-Brutalist styled scrollbar -- thick, sharp-edged, no rounded corners -- matching the site's raw industrial aesthetic.
 
-## Design
-- Two-column layout on desktop (timeline left, map right); stacked on mobile
-- Timeline panel has a fixed height with overflow scroll
-- Custom scrollbar styled in Neo-Brutalist fashion:
-  - Visible, chunky scrollbar track with a solid border
-  - Thumb uses the primary (blue) color with a hard black border -- no rounded corners
-  - Track background matches the card/secondary color
-- Section header: "MY JOURNEY" in Space Mono with brutal styling
-- Timeline cards use `brutal-border` and `brutal-shadow` with active state highlighting
+Add gradient fade masks to the left and right edges of the tech stack marquee section so the scrolling items smoothly fade in and out, creating a polished infinite-scroll illusion.
+
+## Approach
+
+Use CSS `mask-image` (or pseudo-element overlays) on the `.marquee-container` to apply a horizontal linear gradient that fades to transparent on both edges.  
+  
+when hover marquee should stop.
 
 ## Technical Details
 
-### New Dependency
-- `react-leaflet` + `leaflet` for the interactive map
-
-### Modified File: `src/data/experience.ts`
-- Add `location` (string) and `coordinates` (`[lat, lng]`) to each `TimelineEntry`
-- Example: `{ ..., location: "Munich, Germany", coordinates: [48.1351, 11.5820] }`
-
-### New File: `src/components/JourneyTimeline.tsx`
-- Renders a vertical timeline list inside a scrollable container
-- Each entry: date badge, title, description, location with MapPin icon
-- Active entry highlighted with primary border/shadow
-- The scroll container uses a custom CSS class for Neo-Brutalist scrollbar styling (no Radix ScrollArea -- pure CSS `::-webkit-scrollbar` for full visual control)
-
-### New File: `src/components/JourneyMap.tsx`
-- Leaflet `MapContainer` with CartoDB dark_all tile layer
-- Circle markers at each coordinate in primary color
-- Flies to coordinates when active entry changes
-
-### Modified File: `src/pages/Index.tsx`
-- Import timeline and map components plus experience data
-- Add new section after the marquee with a two-column grid
-- Manage `activeIndex` state for synchronizing timeline and map
-
 ### Modified File: `src/index.css`
-- Add Leaflet CSS import
-- Add Neo-Brutalist scrollbar styles:
-  ```css
-  .brutal-scrollbar::-webkit-scrollbar {
-    width: 14px;
-  }
-  .brutal-scrollbar::-webkit-scrollbar-track {
-    background: hsl(var(--secondary));
-    border-left: 3px solid hsl(var(--foreground));
-  }
-  .brutal-scrollbar::-webkit-scrollbar-thumb {
-    background: hsl(var(--primary));
-    border: 3px solid hsl(var(--foreground));
-  }
-  .brutal-scrollbar {
-    scrollbar-color: hsl(var(--primary)) hsl(var(--secondary));
-    scrollbar-width: auto;
-  }
-  ```
 
+- Add a `mask-image` / `-webkit-mask-image` property to `.marquee-container` with a horizontal gradient:
+  - Transparent at the left edge (0%)
+  - Fully visible from ~10% to ~90%
+  - Transparent again at the right edge (100%)
+- This uses the CSS masking approach (no extra DOM elements needed), which works across modern browsers.
+
+```css
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+```
+
+### No other files need changes
+
+The effect is purely CSS on the existing container class.
