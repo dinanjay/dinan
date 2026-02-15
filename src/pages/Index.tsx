@@ -92,7 +92,7 @@ const Index = () => {
       </section>
 
       {/* Journey Timeline */}
-      <section className="border-t-[3px] border-foreground py-12">
+      <section className="border-t-[3px] border-foreground py-12 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-8 bg-primary text-primary-foreground">
             <span className="font-mono text-sm font-bold">MY JOURNEY</span>
@@ -160,7 +160,7 @@ const Index = () => {
           <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-8 bg-primary text-primary-foreground">
             <span className="font-mono text-sm font-bold">LATEST POSTS</span>
           </div>
-          <div className="space-y-6 max-w-4xl">
+          <div className="space-y-6 max-w-4xl pb-2 pr-2">
             {blogPosts.slice(0, 3).map((post) => (
               <Link
                 key={post.slug}

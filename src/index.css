@@ -93,6 +93,7 @@
     @apply bg-background text-foreground;
     font-family: system-ui, -apple-system, sans-serif;
     transition: background-color 0.2s, color 0.2s;
+    overflow-x: hidden;
     background-image:
       linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
