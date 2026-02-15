@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Download, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 
 const navLinks = [
   { label: "Home", path: "/" },
@@ -58,14 +58,6 @@ const Navbar = () => {
             >
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <a
-              href="#"
-              className="brutal-btn flex items-center gap-2 text-sm !py-2 !px-4"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Download size={16} />
-              Download CV
-            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -95,14 +87,6 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
-            <a
-              href="#"
-              className="brutal-btn flex items-center gap-2 text-lg mt-4"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Download size={20} />
-              Download CV
-            </a>
           </div>
         </div>
       )}
