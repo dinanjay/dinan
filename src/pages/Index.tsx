@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Code, Cpu, Wrench, Cog, Bot, CircuitBoard } from "lucide-react";
+import { Github, Linkedin, ArrowRight, Code, Cpu, Wrench, Cog, Bot, CircuitBoard, Database, Terminal, Wifi } from "lucide-react";
 
 const techStack = [
   { name: "Python", icon: Code },
@@ -8,6 +8,9 @@ const techStack = [
   { name: "CAD", icon: Wrench },
   { name: "ROS", icon: Bot },
   { name: "Circuits", icon: CircuitBoard },
+  { name: "Embedded", icon: Terminal },
+  { name: "IoT", icon: Wifi },
+  { name: "SQL", icon: Database },
 ];
 
 const Index = () => {
@@ -16,45 +19,64 @@ const Index = () => {
       {/* Hero */}
       <section className="min-h-[80vh] flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-3xl">
-            <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-6 bg-primary text-primary-foreground">
-              <span className="font-mono text-sm font-bold">MECHATRONICS ENGINEER</span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column */}
+            <div>
+              <p className="font-mono text-muted-foreground text-lg mb-2">Hi there! 👋 I'm</p>
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-4">
+                Mech<span className="text-primary">_</span>Folio
+              </h1>
+              <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-6 bg-primary text-primary-foreground">
+                <span className="font-mono text-sm font-bold">MECHATRONICS ENGINEER</span>
+              </div>
+              <p className="text-lg text-muted-foreground mb-8 max-w-lg">
+                Mechatronics Engineering student passionate about robotics, embedded systems,
+                and creating intelligent machines that interact with the physical world.
+                I build the bridge between hardware and software.
+              </p>
+
+              {/* Social Icons */}
+              <div className="flex items-center gap-4 mb-8">
+                <a href="#" onClick={(e) => e.preventDefault()} className="brutal-border brutal-shadow p-3 bg-background hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all duration-150">
+                  <Github size={22} />
+                </a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="brutal-border brutal-shadow p-3 bg-background hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all duration-150">
+                  <Linkedin size={22} />
+                </a>
+              </div>
+
+              <Link to="/contact" className="brutal-btn flex items-center gap-2 w-fit">
+                Get in Touch <ArrowRight size={18} />
+              </Link>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight mb-6">
-              Building the Bridge Between{" "}
-              <span className="text-primary">Hardware</span> and{" "}
-              <span className="text-primary">Software.</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl">
-              Mechatronics Engineering student passionate about robotics, embedded systems, 
-              and creating intelligent machines that interact with the physical world.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/projects" className="brutal-btn flex items-center gap-2">
-                View Projects <ArrowRight size={18} />
-              </Link>
-              <Link to="/contact" className="brutal-btn-outline flex items-center gap-2">
-                Get in Touch
-              </Link>
+
+            {/* Right Column — Avatar */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
+                {/* Decorative accent block */}
+                <div className="absolute -top-4 -right-4 w-full h-full bg-primary border-[3px] border-foreground" />
+                <div className="relative w-72 h-72 sm:w-80 sm:h-80 brutal-border bg-secondary flex items-center justify-center z-10">
+                  <span className="font-mono font-bold text-6xl text-primary">ME</span>
+                </div>
+                {/* Small decorative dot */}
+                <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-primary border-[3px] border-foreground z-20" />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Tech Stack */}
-      <section className="py-16 border-t-[3px] border-foreground">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold mb-8">
-            TECH STACK<span className="text-primary">_</span>
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {techStack.map((tech) => (
+      {/* Tech Stack Marquee */}
+      <section className="border-t-[3px] border-foreground overflow-hidden py-6">
+        <div className="marquee-container">
+          <div className="marquee-track">
+            {[...techStack, ...techStack].map((tech, i) => (
               <div
-                key={tech.name}
-                className="brutal-card p-6 flex flex-col items-center gap-3 cursor-default"
+                key={`${tech.name}-${i}`}
+                className="brutal-border bg-card px-6 py-4 flex items-center gap-3 shrink-0"
               >
-                <tech.icon size={32} className="text-foreground" />
-                <span className="font-mono font-bold text-sm">{tech.name}</span>
+                <tech.icon size={24} className="text-primary" />
+                <span className="font-mono font-bold text-sm whitespace-nowrap">{tech.name}</span>
               </div>
             ))}
           </div>
