@@ -1,72 +1,55 @@
 
 
-# Personal Portfolio — Neo-Brutalist Mechatronics Engineer
+# Homepage Redesign, Tech Stack Carousel, and Page Consolidation
 
-## Design System
-- **Background:** Off-white (`#F5F5F0`) with Electric Blue (`#0066FF`) as the primary accent
-- **Borders:** 3px solid black on all containers, buttons, cards, and images
-- **Shadows:** Hard drop shadows (`4px 4px 0px #000`) — intensified on hover (`8px 8px 0px #000`)
-- **Typography:** `Space Mono` for headings, system sans-serif for body text
-- **Buttons:** Flat, blocky, no rounded corners — with slight translate + shadow shift on hover for a "physical press" feel
-- **Cards:** Sharp corners (0 or 2px radius max), thick borders, high contrast
+## Summary
+Redesign the homepage inspired by the reference image, convert the tech stack to an auto-scrolling carousel/marquee, remove the Experience page, and merge Links + Contact into a single page.
 
----
+## Changes
 
-## Pages & Sections
+### 1. Homepage Redesign (`src/pages/Index.tsx`)
+Inspired by the reference screenshot layout:
+- **Two-column hero**: Left side with greeting text, name, bio paragraph, social icons (GitHub, LinkedIn), and a "Get in Touch" button. Right side with a placeholder avatar/image area styled with Neo-Brutalist borders and decorative accent elements.
+- **Tech Stack Carousel**: Replace the current static grid with a horizontally auto-scrolling marquee at the bottom of the hero section. The marquee will use CSS animation (infinite scroll) with duplicated items for seamless looping, matching the reference's bottom ticker bar.
 
-### 1. Navigation Bar (Global)
-- Fixed top bar with thick bottom border
-- Logo/Name on the left
-- Links: Home, Projects, Blog, Experience, Links, Contact
-- Prominent **"Download CV"** button styled as a chunky blue block in the nav
-- Mobile: hamburger menu with a full-screen overlay
+### 2. Remove Experience Page
+- Delete `src/pages/Experience.tsx` route from `App.tsx`
+- Remove "Experience" from the navbar links in `Navbar.tsx`
+- Keep `src/data/experience.ts` file in case it's needed later
 
-### 2. Hero Section (Home — `/`)
-- Large bold headline: **"Building the Bridge Between Hardware and Software."**
-- Short subtitle introducing the Mechatronics student persona
-- Call-to-action buttons: "View Projects" and "Get in Touch"
-- **Tech Stack Grid** below the hero — a row of blocky cards/icons for Python, C++, MATLAB, CAD, ROS, and Circuit Design, each with thick borders and the blue accent on hover
+### 3. Merge Links + Contact into one page (`src/pages/Contact.tsx`)
+- Combine the links section (LinkedIn, GitHub, Resume, project links) at the top or side of the contact page
+- Keep the contact form below
+- Update the route: remove `/links` route, update nav to remove "Links" entry
+- The merged page lives at `/contact`
 
-### 3. Projects Showcase (`/projects`)
-- Responsive grid (3 columns desktop, 1 column mobile)
-- Each project card includes:
-  - Thumbnail image area
-  - Title, short description, and tech tags
-  - "View Source" and "Live Demo" buttons
-- Hover effect: card translates up-left and shadow grows
-- 6 realistic placeholder projects (e.g., Line-Following Robot, MATLAB Simulation, ROS Navigation, PCB Design, 3D Printed Gripper, IoT Sensor Dashboard)
-
-### 4. Blog Feed (`/blog`)
-- Top bar with a **search input** (thick bordered) and **tag filter chips** (Robotics, Embedded Systems, AI, CAD, General)
-- Blog post cards in a list layout with title, date, tags, and excerpt
-- Clicking a card opens a detail view (`/blog/:slug`) with full article content
-- 4-5 placeholder articles with realistic Mechatronics topics
-- Data stored in a local TypeScript file — structured so it can easily be swapped for Supabase later
-
-### 5. Experience Timeline (`/experience`)
-- Vertical timeline with alternating left/right entries on desktop, single-column on mobile
-- Thick connecting line with blue accent dots at each node
-- Entries for: University start, key courses, first internship, major project milestones, current status
-- Each node is a bordered card with date, title, and description
-
-### 6. Linkpage (`/links`)
-- Mobile-optimized, centered vertical layout
-- Profile image/avatar at top with thick border
-- Full-width stacked buttons: LinkedIn, GitHub, Resume Download, and 2-3 recent project links
-- Each button uses the Neo-Brutalist block style with icon + label
-
-### 7. Contact Page (`/contact`)
-- Industrial-styled form: Name, Email, Message fields with thick borders and blue focus states
-- Large, bold email address displayed above the form
-- Submit button with chunky styling
-- Form validates inputs client-side and shows a success toast on submission
+### 4. Navbar Updates (`src/components/Navbar.tsx`)
+- Remove "Experience" and "Links" from `navLinks` array
+- Final nav: Home, Projects, Blog, Contact + Download CV button
 
 ---
 
-## Responsive Design
-- Mobile-first layout throughout
-- Navigation collapses to a hamburger menu on small screens
-- Project grid stacks to single column
-- Timeline switches to single-column layout
-- All touch targets sized for mobile usability
+## Technical Details
+
+### Auto-scrolling Marquee (Tech Stack)
+- Pure CSS `@keyframes` animation scrolling left infinitely
+- Content duplicated (rendered twice) so the loop is seamless
+- Each tech item shows an icon + name in a bordered block
+- Sits at the bottom of the hero, full-width with a top border line
+
+### Merged Contact + Links Page
+- Top section: grid/row of Neo-Brutalist link buttons (LinkedIn, GitHub, Resume, etc.)
+- Bottom section: existing contact form with email display
+- Single responsive layout
+
+### Files Modified
+- `src/pages/Index.tsx` -- full redesign with two-column hero + marquee
+- `src/pages/Contact.tsx` -- merge in links content
+- `src/components/Navbar.tsx` -- remove Experience and Links nav items
+- `src/App.tsx` -- remove `/experience` and `/links` routes
+- `src/index.css` -- add marquee keyframes animation
+
+### Files to Delete
+- `src/pages/Links.tsx` (content merged into Contact)
+- `src/pages/Experience.tsx` (removed per request)
 
