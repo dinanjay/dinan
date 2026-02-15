@@ -128,6 +128,19 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
+          <button
+            onClick={() => setIsDark(!isDark)}
+            className="brutal-border brutal-shadow p-3 bg-background transition-all duration-150 hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none"
+            aria-label="Toggle dark mode"
+            style={{
+              transitionDelay: isOpen ? `${navLinks.length * 75}ms` : "0ms",
+              opacity: isOpen ? 1 : 0,
+              transform: isOpen ? "translateY(0)" : "translateY(10px)",
+              transitionDuration: "300ms",
+            }}
+          >
+            {isDark ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
         </div>
       </div>
     </>
