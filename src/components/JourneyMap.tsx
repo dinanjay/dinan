@@ -74,7 +74,7 @@ const JourneyMap = ({ entries, activeIndex, onMarkerClick }: JourneyMapProps) =>
   }, [activeIndex, entries]);
 
   return (
-    <div className="brutal-border h-[500px] overflow-hidden">
+    <div className="brutal-border h-[500px] overflow-hidden relative z-0">
       <div ref={containerRef} className="h-full w-full" style={{ background: "hsl(0 0% 7%)" }} />
     </div>
   );
