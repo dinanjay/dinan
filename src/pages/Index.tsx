@@ -160,7 +160,7 @@ const Index = () => {
           <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-8 bg-primary text-primary-foreground">
             <span className="font-mono text-sm font-bold">LATEST POSTS</span>
           </div>
-          <div className="space-y-6 max-w-4xl pb-2 pr-2">
+          <div className="space-y-6 pb-2 pr-2">
             {blogPosts.slice(0, 3).map((post) => (
               <Link
                 key={post.slug}
