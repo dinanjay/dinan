@@ -1,28 +1,17 @@
 
 
-# Make Dynamic Navbar (Hide on Scroll Down, Show on Scroll Up)
+# Make Latest Posts Cards Full Width on Large Screens
 
-## Summary
-Add scroll-aware behavior to the navbar so it hides when the user scrolls down and reappears when scrolling up. This is a common "smart navbar" pattern that gives more screen real estate while keeping navigation easily accessible.
+## Problem
+The blog post cards in the "Latest Posts" section are constrained to `max-w-4xl` (896px), leaving empty space on the right side on larger screens. This creates a visual inconsistency compared to other full-width sections like Featured Projects.
 
-## Behavior
-- **Scroll down**: Navbar slides up and hides
-- **Scroll up**: Navbar slides back into view
-- **At top of page**: Navbar always visible
-- **Mobile menu open**: Navbar stays visible (don't hide while menu is open)
+## Fix
 
-## Technical Details
+### File: `src/pages/Index.tsx`
+Remove the `max-w-4xl` class from the blog posts container (the `div` with `space-y-6 max-w-4xl pb-2 pr-2`), so the cards stretch to the full container width on all screen sizes.
 
-### File: `src/components/Navbar.tsx`
-- Add two state variables: `lastScrollY` (tracks previous scroll position) and `isVisible` (controls navbar visibility)
-- Add a `useEffect` with a scroll event listener that compares `window.scrollY` to `lastScrollY`:
-  - If scrolling down and past a threshold (~50px), set `isVisible = false`
-  - If scrolling up, set `isVisible = true`
-  - If at the very top (scrollY < 10), always show
-  - Skip hiding if mobile menu is open
-- Apply a CSS transition on the `<nav>` element using `translate-y`: `-translate-y-full` when hidden, `translate-y-0` when visible
-- Add `transition-transform duration-300` for smooth animation
-- Optionally add a subtle background blur/opacity change when navbar is floating (not at top)
+**Before:** `className="space-y-6 max-w-4xl pb-2 pr-2"`
+**After:** `className="space-y-6 pb-2 pr-2"`
 
-### No new files or dependencies needed
+This single class removal aligns the blog section with the rest of the page layout.
 
