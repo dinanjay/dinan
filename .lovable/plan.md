@@ -1,27 +1,13 @@
 
 
-# Fix Leaflet Map Z-Index
+# Fix Search Input Icon/Placeholder Overlap
 
 ## Problem
-The Leaflet map's internal elements use high z-index values (tile pane: 200, controls: 1000+), causing them to render on top of the navbar (z-50) and potentially the mobile overlay.
+The search icon overlaps with the "Search articles..." placeholder text in dark mode. The left padding on the input isn't sufficient to clear the icon.
 
 ## Fix
 
-### File: `src/components/JourneyMap.tsx`
+### File: `src/pages/Blog.tsx`
 
-Add `z-0` (or a low explicit z-index) to the map's wrapper div so the entire map and its internal z-index hierarchy are contained within a low stacking context.
-
-**Change the wrapper div (line 76):**
-
-From:
-```tsx
-<div className="brutal-border h-[500px] overflow-hidden">
-```
-
-To:
-```tsx
-<div className="brutal-border h-[500px] overflow-hidden relative z-0">
-```
-
-Adding `relative z-0` creates a new stacking context for the map container. All of Leaflet's internal z-index values (200, 400, 1000, etc.) will be scoped within this `z-0` context, so the map will never overlap the navbar's `z-50`.
+Increase the input's left padding from `pl-12` to `pl-14` (3.5rem) so the placeholder text starts after the search icon. No other changes needed.
 
