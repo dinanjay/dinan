@@ -28,13 +28,13 @@ const Blog = () => {
         {/* Search & Filters */}
         <div className="mb-10 space-y-4">
           <div className="relative">
-            <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
             <input
               type="text"
               placeholder="Search articles..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="brutal-input w-full pl-12"
+              className="brutal-input w-full pl-12 font-mono text-sm"
             />
           </div>
           <div className="flex flex-wrap gap-2">
