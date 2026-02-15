@@ -1,41 +1,63 @@
 
 
-# Add Blueprint Grid Background
+# Add Journey Timeline Section with Neo-Brutalist Scrolling
 
 ## Summary
-Add a subtle dark square grid pattern (graph paper / blueprint style) over the existing background, maintaining all current Neo-Brutalist design elements.
+Create the Journey Timeline section on the landing page (below the tech stack marquee) with a split layout: scrollable timeline on the left and an interactive Leaflet map on the right. The timeline scroll area will use custom Neo-Brutalist styled scrollbar -- thick, sharp-edged, no rounded corners -- matching the site's raw industrial aesthetic.
 
-## Changes
+## Design
+- Two-column layout on desktop (timeline left, map right); stacked on mobile
+- Timeline panel has a fixed height with overflow scroll
+- Custom scrollbar styled in Neo-Brutalist fashion:
+  - Visible, chunky scrollbar track with a solid border
+  - Thumb uses the primary (blue) color with a hard black border -- no rounded corners
+  - Track background matches the card/secondary color
+- Section header: "MY JOURNEY" in Space Mono with brutal styling
+- Timeline cards use `brutal-border` and `brutal-shadow` with active state highlighting
+
+## Technical Details
+
+### New Dependency
+- `react-leaflet` + `leaflet` for the interactive map
+
+### Modified File: `src/data/experience.ts`
+- Add `location` (string) and `coordinates` (`[lat, lng]`) to each `TimelineEntry`
+- Example: `{ ..., location: "Munich, Germany", coordinates: [48.1351, 11.5820] }`
+
+### New File: `src/components/JourneyTimeline.tsx`
+- Renders a vertical timeline list inside a scrollable container
+- Each entry: date badge, title, description, location with MapPin icon
+- Active entry highlighted with primary border/shadow
+- The scroll container uses a custom CSS class for Neo-Brutalist scrollbar styling (no Radix ScrollArea -- pure CSS `::-webkit-scrollbar` for full visual control)
+
+### New File: `src/components/JourneyMap.tsx`
+- Leaflet `MapContainer` with CartoDB dark_all tile layer
+- Circle markers at each coordinate in primary color
+- Flies to coordinates when active entry changes
+
+### Modified File: `src/pages/Index.tsx`
+- Import timeline and map components plus experience data
+- Add new section after the marquee with a two-column grid
+- Manage `activeIndex` state for synchronizing timeline and map
 
 ### Modified File: `src/index.css`
-
-Update the `body` styles to include a CSS background grid pattern using `background-image` with repeating linear gradients:
-
-- Use semi-transparent lines (e.g., `rgba(255,255,255,0.05)` for dark mode, `rgba(0,0,0,0.06)` for light mode) to create a subtle square grid
-- Grid cell size: ~40px squares
-- Line thickness: 1px
-- The grid overlays on top of the existing `--background` color
-- Add dark-mode-specific grid using `.dark body` selector for appropriate contrast
-
-The implementation uses pure CSS `background-image` with two `linear-gradient` layers (one horizontal, one vertical) -- no extra DOM elements or images needed.
-
-### Technical Detail
-
-```css
-body {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-.dark body {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-```
-
-No other files need changes -- the grid applies globally via `body` styling.
+- Add Leaflet CSS import
+- Add Neo-Brutalist scrollbar styles:
+  ```css
+  .brutal-scrollbar::-webkit-scrollbar {
+    width: 14px;
+  }
+  .brutal-scrollbar::-webkit-scrollbar-track {
+    background: hsl(var(--secondary));
+    border-left: 3px solid hsl(var(--foreground));
+  }
+  .brutal-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border: 3px solid hsl(var(--foreground));
+  }
+  .brutal-scrollbar {
+    scrollbar-color: hsl(var(--primary)) hsl(var(--secondary));
+    scrollbar-width: auto;
+  }
+  ```
 
