@@ -93,24 +93,34 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Overlay */}
-      {isOpen && (
-        <div className="md:hidden fixed inset-0 top-[67px] bg-background z-40 border-t-[3px] border-foreground">
-          <div className="flex flex-col items-center justify-center gap-6 pt-16">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                onClick={() => setIsOpen(false)}
-                className={`font-mono text-2xl font-bold transition-colors hover:text-primary ${
-                  location.pathname === link.path ? "text-primary" : "text-foreground"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+      <div
+        className={`md:hidden fixed inset-0 top-[67px] bg-background z-40 border-t-[3px] border-foreground transition-all duration-300 ${
+          isOpen
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-4 pointer-events-none"
+        }`}
+      >
+        <div className="flex flex-col items-center justify-center gap-6 pt-16">
+          {navLinks.map((link, i) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              onClick={() => setIsOpen(false)}
+              className={`font-mono text-2xl font-bold transition-all hover:text-primary ${
+                location.pathname === link.path ? "text-primary" : "text-foreground"
+              }`}
+              style={{
+                transitionDelay: isOpen ? `${i * 75}ms` : "0ms",
+                opacity: isOpen ? 1 : 0,
+                transform: isOpen ? "translateY(0)" : "translateY(10px)",
+                transitionDuration: "300ms",
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
-      )}
+      </div>
     </nav>
   );
 };
