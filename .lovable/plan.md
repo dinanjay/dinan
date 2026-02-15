@@ -1,26 +1,41 @@
 
 
-# Add Global Footer
+# Add Blueprint Grid Background
 
 ## Summary
-Create a Neo-Brutalist styled footer component and add it to the app layout so it appears on every page.
+Add a subtle dark square grid pattern (graph paper / blueprint style) over the existing background, maintaining all current Neo-Brutalist design elements.
 
-## Design
-- Thick top border (3px solid black), matching the navbar's bottom border
-- Three sections in a row on desktop, stacked on mobile:
-  - **Left**: Copyright text with name and current year (font-mono)
-  - **Center**: Navigation links (Home, Projects, Blog, Contact)
-  - **Right**: Social icons (GitHub, LinkedIn) with brutal-border styling
-- Background matches the site background; keeps the raw, industrial feel
+## Changes
 
-## Technical Details
+### Modified File: `src/index.css`
 
-### New File: `src/components/Footer.tsx`
-- Displays copyright: "© 2026 Mech_Folio. All rights reserved."
-- Row of nav links matching the navbar entries
-- GitHub and LinkedIn icon buttons with the same brutal-shadow hover effect used elsewhere
-- Responsive: flexbox row on desktop, stacked center-aligned on mobile
+Update the `body` styles to include a CSS background grid pattern using `background-image` with repeating linear gradients:
 
-### Modified File: `src/App.tsx`
-- Import and render `<Footer />` below `<AnimatedRoutes />` inside the `<BrowserRouter>`, so it appears on all pages
+- Use semi-transparent lines (e.g., `rgba(255,255,255,0.05)` for dark mode, `rgba(0,0,0,0.06)` for light mode) to create a subtle square grid
+- Grid cell size: ~40px squares
+- Line thickness: 1px
+- The grid overlays on top of the existing `--background` color
+- Add dark-mode-specific grid using `.dark body` selector for appropriate contrast
+
+The implementation uses pure CSS `background-image` with two `linear-gradient` layers (one horizontal, one vertical) -- no extra DOM elements or images needed.
+
+### Technical Detail
+
+```css
+body {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.dark body {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+```
+
+No other files need changes -- the grid applies globally via `body` styling.
 
