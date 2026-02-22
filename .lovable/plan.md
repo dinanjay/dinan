@@ -1,60 +1,78 @@
 
-# Generate Cover Images for Blog Posts and Project Cards
 
-## Overview
+# Refactor Blog System to MDX Files
 
-Use the Lovable AI image generation API (Nano banana model) to create 11 unique cover images -- 5 for blog posts and 6 for project cards -- then save them to the project and update the data files to reference them.
+## What Changes
+Migrate all blog content from the hardcoded TypeScript array in `src/data/blog.ts` into individual `.mdx` files with YAML frontmatter. A new utility module will load and parse these files at build time using Vite's `import.meta.glob`. The existing UI pages will continue working without changes.
 
-## Images to Generate
+## New Files
 
-### Blog Post Covers (5 images)
-1. **PID Tuning** -- A line-following robot on a black track with IR sensors glowing, top-down view, technical/engineering style
-2. **ROS2 Navigation** -- A TurtleBot3 navigating a warehouse with a LIDAR scan overlay, futuristic blue tones
-3. **KiCad PCB** -- A close-up of a green PCB with copper traces and components, electronics photography style
-4. **SolidWorks FEA Gripper** -- A robotic gripper with colorful FEA stress heatmap overlay, CAD render style
-5. **Mechatronics vs Mechanical** -- A split image showing mechanical gears on one side and circuit boards/code on the other
+### 5 MDX files in `src/content/blog/`
 
-### Project Card Covers (6 images)
-1. **Line-Following Robot** -- Arduino robot with wheels and IR sensor array on a white track
-2. **6-DOF Robotic Arm** -- A simulated robotic arm in MATLAB-style wireframe with joint axes shown
-3. **ROS2 Navigation Stack** -- A bird's-eye occupancy grid map with a planned path drawn through it
-4. **Custom Motor Driver PCB** -- A fabricated PCB board with MOSFETs and capacitors, macro photography
-5. **Adaptive 3D-Printed Gripper** -- A flexible TPU gripper grasping an irregular object, studio lighting
-6. **IoT Sensor Dashboard** -- A monitor showing live charts and sensor data with an ESP32 board nearby
+Each post becomes its own file named `{slug}.mdx` with frontmatter for metadata and the Markdown body below. Example structure:
 
-## Technical Steps
+```text
+---
+title: "PID Tuning for a Line-Following Robot"
+date: "2025-12-15"
+tags: ["Robotics", "Embedded Systems"]
+excerpt: "How I tuned a PID controller..."
+coverImage: "pid-tuning.jpg"
+---
 
-### Step 1: Create an Edge Function for Image Generation
-Create a Supabase edge function (or inline script) that calls the Lovable image generation API (`ai.gateway.lovable.dev`) with prompts for each image. The generated base64 images will be saved as files in the `public/images/` directory.
+## The Challenge
 
-**Actually -- simpler approach**: Generate the images directly using the API within the build step, save them as static files in the project.
+Building a line-following robot...
+```
 
-### Step 2: Save Images to Project
-Save each generated image as a PNG file under:
-- `public/images/blog/` -- for blog cover images
-- `public/images/projects/` -- for project card images
+The `coverImage` field stores just the image filename (e.g. `pid-tuning.jpg`), which maps to the existing images in `src/assets/images/blog/`.
 
-### Step 3: Update Data Files
-- **`src/data/blog.ts`** -- Update each post's `coverImage` from `"/placeholder.svg"` to the new path (e.g., `"/images/blog/pid-tuning.png"`)
-- **`src/data/projects.ts`** -- Update each project's `image` from `"/placeholder.svg"` to the new path (e.g., `"/images/projects/line-follower.png"`)
+Files to create:
+- `src/content/blog/pid-tuning-line-follower.mdx`
+- `src/content/blog/ros2-nav-stack-guide.mdx`
+- `src/content/blog/kicad-first-pcb.mdx`
+- `src/content/blog/solidworks-fea-gripper.mdx`
+- `src/content/blog/mechatronics-vs-mechanical.mdx`
 
-## Implementation Approach
+### Utility module: `src/lib/blog.ts`
 
-Since generating 11 images sequentially would be slow, I will batch them in parallel groups. Each image will be generated with a descriptive prompt styled for a neo-brutalist engineering portfolio -- clean, bold, technical illustrations.
+This module will:
+- Use `import.meta.glob('../content/blog/*.mdx', { eager: true, query: '?raw', import: 'default' })` to load all MDX files as raw strings at build time
+- Use `import.meta.glob('../assets/images/blog/*', { eager: true })` to resolve cover image URLs via Vite's asset pipeline
+- Parse YAML frontmatter with a simple regex-based parser (split on `---` delimiters) -- no new dependencies needed
+- Export:
+  - `getAllPosts(): BlogPost[]` -- all posts sorted by date descending
+  - `getPostBySlug(slug: string): BlogPost | undefined`
+  - `getAllTags(): string[]` -- unique sorted tag list
+  - `BlogPost` type (same shape as current)
 
-## Files to Create
-- `public/images/blog/pid-tuning.png`
-- `public/images/blog/ros2-navigation.png`
-- `public/images/blog/kicad-pcb.png`
-- `public/images/blog/solidworks-fea.png`
-- `public/images/blog/mechatronics-vs-mechanical.png`
-- `public/images/projects/line-follower.png`
-- `public/images/projects/robotic-arm.png`
-- `public/images/projects/ros2-nav-stack.png`
-- `public/images/projects/motor-driver-pcb.png`
-- `public/images/projects/3d-gripper.png`
-- `public/images/projects/iot-dashboard.png`
+## Modified Files
 
-## Files to Modify
-- `src/data/blog.ts` -- Update all 5 `coverImage` values
-- `src/data/projects.ts` -- Update all 6 `image` values
+### `src/data/blog.ts`
+
+Replace the entire hardcoded array with a thin re-export wrapper:
+
+```typescript
+import { getAllPosts, getAllTags, type BlogPost } from "@/lib/blog";
+export type { BlogPost };
+export const blogPosts = getAllPosts();
+export const blogTags = getAllTags();
+```
+
+This preserves the exact same export names and shapes, so consumer files need zero changes.
+
+## Unchanged Files
+
+These files import from `@/data/blog` and will continue working as-is since the exports remain identical:
+- `src/pages/Blog.tsx`
+- `src/pages/BlogPost.tsx`
+- `src/pages/Index.tsx`
+- `src/components/MarkdownRenderer.tsx`
+
+## Technical Details
+
+- **No new dependencies** -- uses Vite's `import.meta.glob` for file loading and simple string splitting for frontmatter parsing
+- **Image resolution** -- Vite's glob on the blog images directory produces a map like `{ '../assets/images/blog/pid-tuning.jpg': { default: '/assets/pid-tuning-abc123.jpg' } }`. The frontmatter `coverImage` filename is matched against this map to get the resolved URL
+- **Slug derivation** -- extracted from the `.mdx` filename (strip path and extension)
+- **MDX extension** -- files use `.mdx` as requested; the content is standard Markdown (no JSX), but the extension allows future expansion to embed React components
+
