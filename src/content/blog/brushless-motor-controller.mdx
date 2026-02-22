@@ -1,0 +1,60 @@
+---
+title: "Building a Custom Brushless Motor Controller from Scratch"
+date: "2026-01-10"
+tags: ["Embedded Systems", "Robotics"]
+excerpt: "Designing and programming a FOC-based brushless motor controller using an STM32 microcontroller and DRV8302 gate driver."
+coverImage: "pid-tuning.jpg"
+---
+
+## Why Build Your Own?
+
+Off-the-shelf ESCs work fine for most applications, but when you need **precise torque control** for a robotic joint, you need Field Oriented Control (FOC). Commercial FOC controllers exist, but building one teaches you more about motor theory than any textbook.
+
+## Hardware Design
+
+The controller is built around three main ICs:
+
+- **STM32F446RE** — ARM Cortex-M4 with hardware FPU for fast trig calculations
+- **DRV8302** — Three-phase gate driver with integrated current sense amplifiers
+- **IRF3205** — N-channel MOSFETs for the power stage (3 half-bridges)
+
+> FOC transforms the complex three-phase AC problem into a simple two-axis DC control problem. It's elegant once you understand the math.
+
+## The Clarke-Park Transform
+
+The heart of FOC is two coordinate transforms:
+
+1. **Clarke transform** — converts three-phase currents (Ia, Ib, Ic) into a two-axis stationary frame (Iα, Iβ)
+2. **Park transform** — rotates the stationary frame to align with the rotor, giving direct (Id) and quadrature (Iq) currents
+
+```cpp
+// Clarke Transform
+float i_alpha = i_a;
+float i_beta = (i_a + 2.0f * i_b) * ONE_OVER_SQRT3;
+
+// Park Transform  
+float i_d = i_alpha * cos(theta) + i_beta * sin(theta);
+float i_q = -i_alpha * sin(theta) + i_beta * cos(theta);
+```
+
+## Position Sensing
+
+I used a **AS5047P magnetic encoder** for rotor position feedback. It communicates over SPI at up to 10 MHz, giving 14-bit resolution — more than enough for smooth commutation.
+
+## Results
+
+The controller achieves:
+
+| Parameter | Value |
+|-----------|-------|
+| Control loop rate | 20 kHz |
+| Position resolution | 0.022° |
+| Max continuous current | 30A |
+| Efficiency at rated load | 94% |
+
+## Lessons Learned
+
+- **PCB layout matters enormously** — keep the gate drive loops tight and the power stage away from the logic section
+- **Current sensing calibration** is critical — a 1% offset causes noticeable torque ripple
+- **Start with open-loop control** before closing the loop — it helps you verify the hardware works before debugging software
+- The STM32's hardware FPU makes real-time trig calculations trivial at 20 kHz
