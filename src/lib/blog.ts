@@ -18,13 +18,14 @@ const mdxModules = import.meta.glob('../content/blog/*.mdx', {
 // Load all blog images to resolve filenames to URLs
 const imageModules = import.meta.glob('../assets/images/blog/*', {
   eager: true,
-}) as Record<string, { default: string }>;
+  import: 'default',
+}) as Record<string, string>;
 
 // Build a filename -> resolved URL map for images
 const imageMap: Record<string, string> = {};
 for (const [path, mod] of Object.entries(imageModules)) {
   const filename = path.split('/').pop()!;
-  imageMap[filename] = mod.default;
+  imageMap[filename] = mod;
 }
 
 function parseFrontmatter(raw: string): { frontmatter: Record<string, string>; content: string } {
