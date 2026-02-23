@@ -1,0 +1,36 @@
+---
+title: "Inverse Kinematics for Robotic Arms: Theory to Code"
+date: "2025-11-20"
+tags: ["Robotics"]
+excerpt: "Implementing analytical and numerical inverse kinematics solvers for a 6-DOF robotic arm using Python and C++."
+coverImage: "robotic-arm.jpg"
+---
+
+## The Problem
+
+Given a desired end-effector position and orientation, find the joint angles that achieve it. This is the inverse kinematics (IK) problem.
+
+## Analytical vs Numerical
+
+For arms with specific geometries (like the classic 6R with spherical wrist), closed-form solutions exist and are fast. For arbitrary configurations, iterative numerical methods like Jacobian transpose or damped least squares are needed.
+
+```python
+def jacobian_ik(target, current_joints, max_iter=100):
+    for _ in range(max_iter):
+        current_pos = forward_kinematics(current_joints)
+        error = target - current_pos
+        if np.linalg.norm(error) < 1e-4:
+            break
+        J = compute_jacobian(current_joints)
+        delta = np.linalg.pinv(J) @ error
+        current_joints += delta * 0.1
+    return current_joints
+```
+
+## Singularities
+
+Near singularities the Jacobian becomes ill-conditioned. Damped least squares adds a regularization term to handle this gracefully.
+
+## Real-Time Performance
+
+On an STM32, the analytical solver runs in under 50μs. The numerical solver takes 200-500μs depending on the initial guess quality.

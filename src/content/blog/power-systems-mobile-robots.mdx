@@ -1,0 +1,33 @@
+---
+title: "Power System Design for Mobile Robots"
+date: "2025-07-25"
+tags: ["Electronics", "Robotics"]
+excerpt: "Designing robust power distribution systems for mobile robots — battery selection, voltage regulation, and power budgeting."
+coverImage: "motor-driver-pcb.jpg"
+---
+
+## Power Budget First
+
+Before selecting batteries, calculate your power budget. List every subsystem with its voltage, peak current, and duty cycle.
+
+| Subsystem | Voltage | Peak Current | Avg Current |
+|-----------|---------|-------------|-------------|
+| Drive motors (x4) | 12V | 5A each | 2A each |
+| Compute (Jetson) | 5V | 4A | 2.5A |
+| Sensors | 3.3V | 0.5A | 0.3A |
+| Servos (x6) | 7.4V | 2A each | 0.5A each |
+
+## Battery Selection
+
+LiPo batteries offer the best energy density. For a 1-hour runtime with the budget above, you need approximately 200Wh — a 6S 8000mAh pack.
+
+## Voltage Regulation
+
+Use synchronous buck converters (not linear regulators) for efficiency. The TPS54560 handles 5A continuous with >90% efficiency across a wide input range.
+
+## Safety
+
+- Always include a main power switch rated for your peak current
+- Add reverse polarity protection (P-channel MOSFET, not a diode)
+- Include voltage monitoring to warn before the battery hits minimum voltage
+- Fuse each high-current branch independently

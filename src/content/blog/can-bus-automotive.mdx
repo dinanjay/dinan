@@ -1,0 +1,37 @@
+---
+title: "CAN Bus Communication for Robotics and Automotive"
+date: "2025-09-12"
+tags: ["Embedded Systems"]
+excerpt: "Understanding and implementing CAN bus protocol for reliable multi-node communication in robotic systems."
+coverImage: "motor-driver-pcb.jpg"
+---
+
+## Why CAN?
+
+Controller Area Network (CAN) is the gold standard for multi-node embedded communication. It's differential (noise-immune), prioritized (deterministic), and error-checked (reliable). Every car on the road uses it.
+
+## Hardware Setup
+
+You need a CAN transceiver (like MCP2551) between your microcontroller and the bus. The bus itself is just a twisted pair terminated with 120Ω resistors at each end.
+
+## Message Structure
+
+CAN frames carry up to 8 bytes of data with an 11-bit (standard) or 29-bit (extended) identifier. Lower IDs win arbitration — meaning higher priority messages get through first.
+
+```c
+CAN_TxHeaderTypeDef txHeader;
+txHeader.StdId = 0x100;  // Motor command
+txHeader.DLC = 4;        // 4 bytes
+uint8_t data[4] = {speed >> 8, speed & 0xFF, torque >> 8, torque & 0xFF};
+HAL_CAN_AddTxMessage(&hcan1, &txHeader, data, &txMailbox);
+```
+
+## Building a Robot CAN Network
+
+For a multi-joint robot, assign each joint controller a base ID and use offsets for different message types (position feedback, torque command, status).
+
+## Debugging Tips
+
+- Get a USB-CAN adapter (like PCAN) — it's indispensable
+- Start at 125 kbps and increase speed once everything works
+- Check your termination resistors first when nothing communicates
