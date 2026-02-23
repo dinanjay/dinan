@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BackToTop from "@/components/BackToTop";
 import PageTransition from "@/components/PageTransition";
 
 const Index = lazy(() => import("./pages/Index"));
@@ -46,6 +47,7 @@ const App = () => (
         <Navbar />
         <AnimatedRoutes />
         <Footer />
+        <BackToTop />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
