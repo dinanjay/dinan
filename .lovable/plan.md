@@ -1,35 +1,28 @@
 
 
-# Newsletter Signup Section
+# Add Pagination to Blog Page
 
 ## What Changes
-Add a newsletter signup section at the bottom of the Blog page where visitors can enter their email to subscribe. Since there is no backend connected, the form will store the email in `localStorage` as a simple client-side record and show a success toast using the existing `sonner` toast system. This gives a fully working UI that can later be wired to a real backend (e.g. Supabase, Mailchimp) when ready.
+Add pagination to the blog listing page, showing 10 posts per page. The pagination controls will use the existing neobrutalist design system (`brutal-border`, `brutal-btn`, font-mono) rather than the shadcn pagination component, to stay consistent with the rest of the site.
 
 ## Modified File
 
 ### `src/pages/Blog.tsx`
 
-Add a newsletter signup block after the blog post list (before `</main>` closes):
-
-- A styled container using `brutal-border brutal-shadow-primary` with a `bg-card` background
-- Heading: "STAY UPDATED" with the site's monospace badge style
-- Short description: "Get notified when I publish new posts."
-- A horizontal form with:
-  - An email input using the existing `brutal-input` class
-  - A submit button using the existing `brutal-btn` class with a `Mail` icon from lucide-react
-- On submit:
-  - Validate email format with a simple regex check
-  - Save to `localStorage` under a `newsletter_subscribers` key (array of emails)
-  - Show a success toast via `sonner`'s `toast()` function (already installed)
-  - Clear the input field
-  - If already subscribed, show an info toast instead
-- Input validation: trim whitespace, enforce max 255 characters, validate email format -- consistent with the existing contact form constraints
+1. Add a `currentPage` state (default: 1), reset to 1 whenever search or tag filter changes.
+2. After filtering posts, slice the array: `filtered.slice((currentPage - 1) * 10, currentPage * 10)`.
+3. Calculate `totalPages = Math.ceil(filtered.length / 10)`.
+4. Render pagination controls below the post list (only when `totalPages > 1`):
+   - "Previous" and "Next" buttons using `brutal-btn` styling, disabled at boundaries.
+   - Numbered page buttons using `brutal-border` with `bg-primary text-primary-foreground` for the active page.
+   - All text in `font-mono font-bold text-sm` to match existing tag/filter buttons.
+5. Smooth scroll to top of post list when changing pages.
 
 ## Technical Details
 
-- No new files or dependencies needed
-- Uses `sonner` toast (already imported in the app via `src/components/ui/sonner.tsx`)
-- Email validation uses a standard regex pattern
-- `localStorage` acts as a placeholder store; easily replaceable with a Supabase table or external API later
-- The section is placed inside the existing `max-w-4xl` container for consistent alignment
+- No new files or dependencies needed.
+- Posts per page constant: `const POSTS_PER_PAGE = 10`.
+- Reset `currentPage` to 1 inside the `search` and `activeTag` change handlers to avoid showing an empty page after filtering.
+- Pagination buttons follow the same pattern as the tag filter buttons (e.g., `brutal-border px-3 py-1 font-mono text-sm font-bold`).
+- The "Previous"/"Next" buttons use the `brutal-btn` class with `opacity-50 pointer-events-none` when disabled.
 
