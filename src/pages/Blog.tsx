@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ArrowRight } from "lucide-react";
+import { Search, ArrowRight, Mail } from "lucide-react";
+import { toast } from "sonner";
 import { blogPosts, blogTags } from "@/data/blog";
 
 const Blog = () => {
@@ -103,8 +104,66 @@ const Blog = () => {
             </div>
           )}
         </div>
+
+        {/* Newsletter Signup */}
+        <NewsletterSignup />
       </div>
     </main>
+  );
+};
+
+const NewsletterSignup = () => {
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!trimmed) return;
+
+    if (trimmed.length > 255) {
+      toast.error("Email must be less than 255 characters.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmed)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    const existing: string[] = JSON.parse(localStorage.getItem("newsletter_subscribers") || "[]");
+    if (existing.includes(trimmed)) {
+      toast.info("You're already subscribed!");
+      return;
+    }
+
+    localStorage.setItem("newsletter_subscribers", JSON.stringify([...existing, trimmed]));
+    toast.success("Subscribed! You'll be notified of new posts.");
+    setEmail("");
+  };
+
+  return (
+    <div className="mt-16 brutal-border brutal-shadow-primary bg-card p-8">
+      <h2 className="font-mono text-2xl font-bold mb-2">
+        STAY UPDATED<span className="text-primary">_</span>
+      </h2>
+      <p className="text-muted-foreground text-sm mb-6">
+        Get notified when I publish new posts.
+      </p>
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="your@email.com"
+          maxLength={255}
+          className="brutal-input flex-1"
+        />
+        <button type="submit" className="brutal-btn flex items-center justify-center gap-2">
+          <Mail size={18} /> Subscribe
+        </button>
+      </form>
+    </div>
   );
 };
 
