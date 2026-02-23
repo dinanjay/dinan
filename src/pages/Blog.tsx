@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ArrowRight, Mail } from "lucide-react";
+import { Search, ArrowRight, Mail, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { blogPosts, blogTags } from "@/data/blog";
+
+const POSTS_PER_PAGE = 10;
 
 const Blog = () => {
   const [search, setSearch] = useState("");
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const filtered = blogPosts.filter((post) => {
     const matchesSearch =
@@ -15,6 +18,14 @@ const Blog = () => {
     const matchesTag = !activeTag || post.tags.includes(activeTag);
     return matchesSearch && matchesTag;
   });
+
+  const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
+  const paginated = filtered.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <main className="pt-24 pb-16">
@@ -34,13 +45,13 @@ const Blog = () => {
               type="text"
               placeholder="Search articles..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
               className="brutal-input w-full !pl-14 font-mono text-sm"
             />
           </div>
           <div className="flex flex-wrap gap-2">
             <button
-              onClick={() => setActiveTag(null)}
+              onClick={() => { setActiveTag(null); setCurrentPage(1); }}
               className={`brutal-border px-3 py-1 font-mono text-sm font-bold transition-colors ${
                 !activeTag ? "bg-primary text-primary-foreground" : "bg-background text-foreground hover:bg-secondary"
               }`}
@@ -50,7 +61,7 @@ const Blog = () => {
             {blogTags.map((tag) => (
               <button
                 key={tag}
-                onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+                onClick={() => { setActiveTag(activeTag === tag ? null : tag); setCurrentPage(1); }}
                 className={`brutal-border px-3 py-1 font-mono text-sm font-bold transition-colors ${
                   activeTag === tag ? "bg-primary text-primary-foreground" : "bg-background text-foreground hover:bg-secondary"
                 }`}
@@ -63,7 +74,7 @@ const Blog = () => {
 
         {/* Posts */}
         <div className="space-y-6">
-          {filtered.map((post) => (
+          {paginated.map((post) => (
             <Link
               key={post.slug}
               to={`/blog/${post.slug}`}
@@ -104,6 +115,37 @@ const Blog = () => {
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-10 flex items-center justify-center gap-2 flex-wrap">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`brutal-btn flex items-center gap-1 text-sm ${currentPage === 1 ? "opacity-50 pointer-events-none" : ""}`}
+            >
+              <ChevronLeft size={16} /> Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => goToPage(page)}
+                className={`brutal-border px-3 py-1 font-mono text-sm font-bold transition-colors ${
+                  currentPage === page ? "bg-primary text-primary-foreground" : "bg-background text-foreground hover:bg-secondary"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`brutal-btn flex items-center gap-1 text-sm ${currentPage === totalPages ? "opacity-50 pointer-events-none" : ""}`}
+            >
+              Next <ChevronRight size={16} />
+            </button>
+          </div>
+        )}
 
         {/* Newsletter Signup */}
         <NewsletterSignup />
