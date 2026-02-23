@@ -1,0 +1,41 @@
+---
+title: "Getting Started with FreeRTOS on STM32"
+date: "2025-12-15"
+tags: ["Embedded Systems"]
+excerpt: "A practical guide to setting up FreeRTOS on STM32 microcontrollers — tasks, queues, and real-time scheduling for robotics applications."
+coverImage: "pid-tuning.jpg"
+---
+
+## Why Use an RTOS?
+
+When your embedded project grows beyond blinking LEDs, you need deterministic scheduling. FreeRTOS gives you preemptive multitasking on resource-constrained microcontrollers.
+
+## Setting Up
+
+Using STM32CubeMX, enabling FreeRTOS is a checkbox away. But understanding what happens under the hood is what separates hobbyists from engineers.
+
+```c
+// Create a task
+xTaskCreate(motorControlTask, "Motor", 256, NULL, 3, NULL);
+xTaskCreate(sensorReadTask, "Sensor", 128, NULL, 2, NULL);
+xTaskCreate(commsTask, "Comms", 256, NULL, 1, NULL);
+```
+
+## Task Priorities
+
+Higher priority tasks preempt lower ones. For a robot, the control loop runs at the highest priority, sensor reads at medium, and communication at the lowest.
+
+## Inter-Task Communication
+
+Queues are the safest way to pass data between tasks:
+
+```c
+QueueHandle_t sensorQueue = xQueueCreate(10, sizeof(SensorData));
+xQueueSend(sensorQueue, &data, pdMS_TO_TICKS(10));
+```
+
+## Lessons Learned
+
+- Always use `configASSERT()` during development
+- Stack overflow detection saves hours of debugging
+- Avoid dynamic memory allocation after initialization

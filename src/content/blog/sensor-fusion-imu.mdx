@@ -1,0 +1,37 @@
+---
+title: "Sensor Fusion with IMUs: Complementary and Kalman Filters"
+date: "2025-10-05"
+tags: ["Embedded Systems", "Robotics"]
+excerpt: "Combining accelerometer, gyroscope, and magnetometer data for reliable orientation estimation in mobile robots."
+coverImage: "pid-tuning.jpg"
+---
+
+## The Problem with Raw Sensors
+
+Gyroscopes drift over time. Accelerometers are noisy and sensitive to vibration. Magnetometers are affected by nearby motors. Individually, none of them give you a reliable heading. Together, they're excellent.
+
+## Complementary Filter
+
+The simplest approach combines gyro integration (good short-term) with accelerometer angle (good long-term):
+
+```c
+angle = 0.98 * (angle + gyro_rate * dt) + 0.02 * accel_angle;
+```
+
+## Kalman Filter
+
+For better performance, an Extended Kalman Filter (EKF) propagates uncertainty and optimally weights each sensor based on its noise characteristics.
+
+## Results
+
+| Method | Drift after 60s | CPU Time |
+|--------|-----------------|----------|
+| Gyro only | 4.2° | 2μs |
+| Complementary | 0.3° | 5μs |
+| EKF | 0.1° | 45μs |
+
+## Takeaways
+
+- Start with the complementary filter — it's 90% as good with 10% of the complexity
+- Calibrate your magnetometer with hard/soft iron compensation
+- The EKF is worth it when you need sub-degree accuracy

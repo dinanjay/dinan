@@ -1,0 +1,44 @@
+---
+title: "Advanced UART Debugging for Embedded Systems"
+date: "2025-05-15"
+tags: ["Embedded Systems"]
+excerpt: "Beyond printf debugging — using logic analyzers, DMA-based logging, and structured protocols for efficient embedded development."
+coverImage: "kicad-pcb.jpg"
+---
+
+## The Printf Problem
+
+Serial printf is every embedded developer's first debugging tool. It's also a trap — blocking UART calls disrupt timing, overflow buffers, and hide the bugs you're trying to find.
+
+## DMA-Based Logging
+
+Use DMA transfers so the CPU isn't blocked:
+
+```c
+char log_buf[256];
+int len = snprintf(log_buf, sizeof(log_buf), "[%lu] Motor: %d RPM\n", HAL_GetTick(), rpm);
+HAL_UART_Transmit_DMA(&huart2, (uint8_t*)log_buf, len);
+```
+
+## Structured Logging
+
+Instead of human-readable strings, send binary packets with a type, timestamp, and payload. Parse them on the host side with a Python script for filtering and visualization.
+
+## Logic Analyzers
+
+A Saleae Logic or even a $10 clone gives you:
+- Exact timing measurements between events
+- Protocol decoding (UART, SPI, I2C, CAN)
+- Trigger on specific byte patterns
+- Correlation between multiple signals
+
+## SWO Trace
+
+STM32 supports Serial Wire Output (SWO) trace — a dedicated debug pin that doesn't use your UART. Combined with STM32CubeIDE's trace viewer, it's the most powerful debugging tool available.
+
+## Golden Rules
+
+1. Never remove debug infrastructure from production firmware — just disable it with a compile flag
+2. Timestamp everything
+3. Log state transitions, not continuous values
+4. Buffer overflow is the #1 cause of mysterious crashes in logging code

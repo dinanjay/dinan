@@ -1,0 +1,53 @@
+---
+title: "Building a SLAM System with ROS 2 and LiDAR"
+date: "2025-06-30"
+tags: ["ROS 2", "Robotics"]
+excerpt: "Setting up simultaneous localization and mapping using Nav2, slam_toolbox, and a 2D LiDAR sensor on a differential drive robot."
+coverImage: "ros2-navigation.jpg"
+---
+
+## What is SLAM?
+
+Simultaneous Localization and Mapping solves a chicken-and-egg problem: you need a map to localize, but you need localization to build a map. SLAM does both at once.
+
+## Hardware Requirements
+
+- A 2D LiDAR (RPLidar A1 is great for learning — $100, 12m range)
+- Wheel encoders for odometry
+- A compute platform running ROS 2 (Raspberry Pi 4 minimum, Jetson Nano preferred)
+
+## Software Stack
+
+```bash
+sudo apt install ros-humble-slam-toolbox ros-humble-nav2-bringup
+ros2 launch slam_toolbox online_async_launch.py
+```
+
+## Configuration
+
+The key parameters to tune:
+
+```yaml
+slam_toolbox:
+  ros__parameters:
+    resolution: 0.05          # Map resolution in meters/pixel
+    max_laser_range: 8.0       # Ignore returns beyond this
+    minimum_travel_distance: 0.3  # Min movement before new scan
+    minimum_travel_heading: 0.2   # Min rotation before new scan
+```
+
+## Saving and Using Maps
+
+Once you've driven around your environment:
+
+```bash
+ros2 run nav2_map_server map_saver_cli -f my_map
+```
+
+This gives you a `.pgm` image and `.yaml` metadata file that Nav2 can use for autonomous navigation.
+
+## Tips
+
+- Drive slowly during mapping for better scan matching
+- Loop closures dramatically improve map quality — revisit starting areas
+- Filter out dynamic obstacles (people, pets) from your scans

@@ -1,0 +1,34 @@
+---
+title: "Designing 3D-Printed Parts for Robotics"
+date: "2025-08-18"
+tags: ["CAD/CAM", "Robotics"]
+excerpt: "Best practices for designing functional 3D-printed components — from material selection to print orientation and structural optimization."
+coverImage: "3d-gripper.jpg"
+---
+
+## Beyond Prototyping
+
+3D printing isn't just for mockups. With the right design practices, printed parts can serve as functional components in robots that run for thousands of hours.
+
+## Material Selection
+
+- **PLA** — Easy to print, dimensionally accurate, but brittle under impact
+- **PETG** — Good balance of strength, flexibility, and printability
+- **Nylon** — Excellent wear resistance for gears and bearings
+- **ASA** — UV-stable for outdoor robots
+
+## Design for Print
+
+Key rules:
+1. Orient parts so layer lines don't align with primary stress directions
+2. Use chamfers instead of fillets on bottom edges
+3. Design snap-fit features with 0.3mm clearance
+4. Add mouse ears to corners prone to warping
+
+## Structural Optimization
+
+Topology optimization in Fusion 360 or SolidWorks can reduce material use by 40-60% while maintaining strength. The organic shapes it produces are perfect for additive manufacturing.
+
+## Heat Set Inserts
+
+For threaded connections, heat-set brass inserts are far superior to threading directly into plastic. They provide reliable clamping force and can be assembled/disassembled repeatedly.
