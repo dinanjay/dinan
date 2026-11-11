@@ -13,19 +13,21 @@ const JourneyMap = ({ entries, activeIndex, onMarkerClick }: JourneyMapProps) =>
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.CircleMarker[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
 
   // Initialize map
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
 
     const map = L.map(containerRef.current, {
-      center: entries[0]?.coordinates ?? [48.1351, 11.582],
-      zoom: 5,
+      center: [20, 40],
+      zoom: 2,
       scrollWheelZoom: false,
     });
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19,
     }).addTo(map);
 
     // Add markers
@@ -45,6 +47,12 @@ const JourneyMap = ({ entries, activeIndex, onMarkerClick }: JourneyMapProps) =>
       marker.on("click", () => onMarkerClick(index));
       markersRef.current.push(marker);
     });
+
+    // Fit bounds to show all markers initially
+    if (entries.length > 0) {
+      const bounds = L.latLngBounds(entries.map((entry) => entry.coordinates));
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
 
     mapRef.current = map;
 
@@ -66,6 +74,12 @@ const JourneyMap = ({ entries, activeIndex, onMarkerClick }: JourneyMapProps) =>
         fillColor: isActive ? "hsl(216 100% 50%)" : "hsl(216 100% 50% / 0.4)",
       });
     });
+
+    // Skip flying to the first coordinate on initial render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
 
     const coords = entries[activeIndex]?.coordinates;
     if (coords) {

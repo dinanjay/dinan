@@ -94,17 +94,16 @@
     font-family: system-ui, -apple-system, sans-serif;
     transition: background-color 0.2s, color 0.2s;
     overflow-x: hidden;
-    background-image:
+    background-image: 
       linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
       linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-size: 50px 50px;
   }
 
   .dark body {
-    background-image:
+    background-image: 
       linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -186,6 +185,10 @@
 /* Leaflet overrides */
 .leaflet-container {
   font-family: 'Space Mono', monospace;
+}
+
+.leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%) grayscale(60%);
 }
 
 /* Marquee */

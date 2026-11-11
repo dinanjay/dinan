@@ -156,8 +156,9 @@ const Blog = () => {
 
 const NewsletterSignup = () => {
   const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
     if (!trimmed) return;
@@ -173,15 +174,34 @@ const NewsletterSignup = () => {
       return;
     }
 
-    const existing: string[] = JSON.parse(localStorage.getItem("newsletter_subscribers") || "[]");
-    if (existing.includes(trimmed)) {
-      toast.info("You're already subscribed!");
-      return;
-    }
+    setIsSubmitting(true);
 
-    localStorage.setItem("newsletter_subscribers", JSON.stringify([...existing, trimmed]));
-    toast.success("Subscribed! You'll be notified of new posts.");
-    setEmail("");
+    try {
+      // Replace with your Formspree ID or secondary newsletter form endpoint
+      const response = await fetch("https://formspree.io/f/mqakpeaq", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          email: trimmed,
+          _subject: "New Blog Newsletter Subscription"
+        })
+      });
+
+      if (response.ok) {
+        toast.success("Subscribed! You'll be notified of new posts.");
+        setEmail("");
+      } else {
+        const data = await response.json();
+        toast.error(data.errors?.[0]?.message || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Failed to connect to subscription server. Please check your network connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -199,10 +219,15 @@ const NewsletterSignup = () => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="your@email.com"
           maxLength={255}
+          disabled={isSubmitting}
           className="brutal-input flex-1"
         />
-        <button type="submit" className="brutal-btn flex items-center justify-center gap-2">
-          <Mail size={18} /> Subscribe
+        <button 
+          type="submit" 
+          disabled={isSubmitting}
+          className={`brutal-btn flex items-center justify-center gap-2 ${isSubmitting ? "opacity-50 pointer-events-none" : ""}`}
+        >
+          <Mail size={18} /> {isSubmitting ? "Subscribing..." : "Subscribe"}
         </button>
       </form>
     </div>

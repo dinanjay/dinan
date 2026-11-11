@@ -56,8 +56,8 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/" className="font-mono font-bold text-xl tracking-tight">
-              MECH<span className="text-primary">_</span>FOLIO
+            <Link to="/" className="font-mono font-bold text-lg sm:text-xl tracking-tight">
+              DINAN
             </Link>
 
             {/* Desktop Links */}
@@ -106,7 +106,7 @@ const Navbar = () => {
           backgroundImage: isDark
             ? 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)'
             : 'linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
+          backgroundSize: '50px 50px',
         }}
       >
         <div className="flex flex-col items-center justify-center gap-6 pt-16">

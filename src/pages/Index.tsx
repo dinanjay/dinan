@@ -32,10 +32,10 @@ const Index = () => {
             <div>
               <p className="font-mono text-muted-foreground text-lg mb-2">Hi there! 👋 I'm</p>
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight mb-4">
-                Mech<span className="text-primary">_</span>Folio
+                Dinan<span className="text-primary">_</span>Jayasinghe
               </h1>
               <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-6 bg-primary text-primary-foreground">
-                <span className="font-mono text-sm font-bold">MECHATRONICS ENGINEER</span>
+                <span className="font-mono text-sm font-bold">MECHATRONICS UNDERGRADUATE</span>
               </div>
               <p className="text-lg text-muted-foreground mb-8 max-w-lg">
                 Mechatronics Engineering student passionate about robotics, embedded systems,
@@ -45,10 +45,10 @@ const Index = () => {
 
               {/* Social Icons */}
               <div className="flex items-center gap-4 mb-8">
-                <a href="#" onClick={(e) => e.preventDefault()} className="brutal-border brutal-shadow p-3 bg-background hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all duration-150">
+                <a href="https://github.com/dinanjay/" target="_blank" rel="noopener noreferrer" className="brutal-border brutal-shadow p-3 bg-background hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all duration-150">
                   <Github size={22} />
                 </a>
-                <a href="#" onClick={(e) => e.preventDefault()} className="brutal-border brutal-shadow p-3 bg-background hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all duration-150">
+                <a href="https://www.linkedin.com/in/dinanjayasinghe/" target="_blank" rel="noopener noreferrer" className="brutal-border brutal-shadow p-3 bg-background hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[8px_8px_0px_0px_hsl(var(--foreground))] transition-all duration-150">
                   <Linkedin size={22} />
                 </a>
               </div>
@@ -63,8 +63,8 @@ const Index = () => {
               <div className="relative">
                 {/* Decorative accent block */}
                 <div className="absolute -top-4 -right-4 w-full h-full bg-primary border-[3px] border-foreground" />
-                <div className="relative w-72 h-72 sm:w-80 sm:h-80 brutal-border bg-secondary flex items-center justify-center z-10">
-                  <span className="font-mono font-bold text-6xl text-primary">ME</span>
+                <div className="relative w-72 h-72 sm:w-80 sm:h-80 brutal-border bg-secondary flex items-center justify-center z-10 overflow-hidden">
+                  <img src="/images/img.gif" alt="Dinan Jayasinghe" className="w-full h-full object-cover" />
                 </div>
                 {/* Small decorative dot */}
                 <div className="absolute -bottom-3 -left-3 w-6 h-6 bg-primary border-[3px] border-foreground z-20" />
@@ -118,34 +118,40 @@ const Index = () => {
           <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-8 bg-primary text-primary-foreground">
             <span className="font-mono text-sm font-bold">FEATURED PROJECTS</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.slice(0, 3).map((project) => (
-              <article key={project.id} className="brutal-card flex flex-col">
-                <div className="h-48 bg-secondary border-b-[3px] border-foreground flex items-center justify-center">
-                  <span className="font-mono text-muted-foreground text-sm">[ thumbnail ]</span>
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="text-lg font-bold mb-2">{project.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4 flex-1">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="brutal-border px-2 py-0.5 text-xs font-mono font-bold bg-secondary">
-                        {tag}
-                      </span>
-                    ))}
+          {projects.length === 0 ? (
+            <div className="brutal-border p-12 text-center">
+              <p className="font-mono text-muted-foreground">No projects published yet.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projects.slice(0, 3).map((project) => (
+                <article key={project.id} className="brutal-card flex flex-col">
+                  <div className="h-48 bg-secondary border-b-[3px] border-foreground flex items-center justify-center">
+                    <span className="font-mono text-muted-foreground text-sm">[ thumbnail ]</span>
                   </div>
-                  <div className="flex gap-3">
-                    <a href={project.sourceUrl} className="brutal-btn-outline flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
-                      <Github size={14} /> Source
-                    </a>
-                    <a href={project.demoUrl} className="brutal-btn flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
-                      <ExternalLink size={14} /> Demo
-                    </a>
+                  <div className="p-5 flex flex-col flex-1">
+                    <h3 className="text-lg font-bold mb-2">{project.title}</h3>
+                    <p className="text-muted-foreground text-sm mb-4 flex-1">{project.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="brutal-border px-2 py-0.5 text-xs font-mono font-bold bg-secondary">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-3">
+                      <a href={project.sourceUrl} className="brutal-btn-outline flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
+                        <Github size={14} /> Source
+                      </a>
+                      <a href={project.demoUrl} className="brutal-btn flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
+                        <ExternalLink size={14} /> Demo
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
           <div className="mt-8 text-center">
             <Link to="/projects" className="brutal-btn-outline inline-flex items-center gap-2">
               View All Projects <ArrowRight size={18} />
@@ -160,31 +166,37 @@ const Index = () => {
           <div className="brutal-border brutal-shadow-primary inline-block px-4 py-1 mb-8 bg-primary text-primary-foreground">
             <span className="font-mono text-sm font-bold">LATEST POSTS</span>
           </div>
-          <div className="space-y-6 pb-2 pr-2">
-            {blogPosts.slice(0, 3).map((post) => (
-              <Link
-                key={post.slug}
-                to={`/blog/${post.slug}`}
-                className="brutal-card block p-6 group"
-              >
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {post.tags.map((tag) => (
-                    <span key={tag} className="text-xs font-mono font-bold text-primary">
-                      {tag}
-                    </span>
-                  ))}
-                  <span className="text-xs text-muted-foreground font-mono ml-auto">{post.date}</span>
-                </div>
-                <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                  {post.title}
-                </h2>
-                <p className="text-muted-foreground text-sm mb-3">{post.excerpt}</p>
-                <span className="font-mono text-sm font-bold text-primary flex items-center gap-1">
-                  Read more <ArrowRight size={14} />
-                </span>
-              </Link>
-            ))}
-          </div>
+          {blogPosts.length === 0 ? (
+            <div className="brutal-border p-12 text-center">
+              <p className="font-mono text-muted-foreground">No articles published yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-6 pb-2 pr-2">
+              {blogPosts.slice(0, 3).map((post) => (
+                <Link
+                  key={post.slug}
+                  to={`/blog/${post.slug}`}
+                  className="brutal-card block p-6 group"
+                >
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {post.tags.map((tag) => (
+                      <span key={tag} className="text-xs font-mono font-bold text-primary">
+                        {tag}
+                      </span>
+                    ))}
+                    <span className="text-xs text-muted-foreground font-mono ml-auto">{post.date}</span>
+                  </div>
+                  <h2 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                    {post.title}
+                  </h2>
+                  <p className="text-muted-foreground text-sm mb-3">{post.excerpt}</p>
+                  <span className="font-mono text-sm font-bold text-primary flex items-center gap-1">
+                    Read more <ArrowRight size={14} />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          )}
           <div className="mt-8 text-center">
             <Link to="/blog" className="brutal-btn-outline inline-flex items-center gap-2">
               View All Posts <ArrowRight size={18} />

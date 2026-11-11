@@ -1,5 +1,5 @@
-import { getAllPosts, getAllTags, type BlogPost } from "@/lib/blog";
+import { type BlogPost } from "@/lib/blog";
 
 export type { BlogPost };
-export const blogPosts = getAllPosts();
-export const blogTags = getAllTags();
+export const blogPosts: BlogPost[] = [];
+export const blogTags: string[] = [];
