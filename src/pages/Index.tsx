@@ -126,8 +126,19 @@ const Index = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.slice(0, 3).map((project) => (
                 <article key={project.id} className="brutal-card flex flex-col">
-                  <div className="h-48 bg-secondary border-b-[3px] border-foreground flex items-center justify-center">
-                    <span className="font-mono text-muted-foreground text-sm">[ thumbnail ]</span>
+                  <div className="h-48 bg-secondary border-b-[3px] border-foreground overflow-hidden">
+                    {project.image && project.image !== "/placeholder.svg" ? (
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="font-mono text-muted-foreground text-sm">[ thumbnail ]</span>
+                      </div>
+                    )}
                   </div>
                   <div className="p-5 flex flex-col flex-1">
                     <h3 className="text-lg font-bold mb-2">{project.title}</h3>
@@ -140,10 +151,22 @@ const Index = () => {
                       ))}
                     </div>
                     <div className="flex gap-3">
-                      <a href={project.sourceUrl} className="brutal-btn-outline flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
-                        <Github size={14} /> Source
-                      </a>
-                      <a href={project.demoUrl} className="brutal-btn flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
+                      {project.sourceUrl && project.sourceUrl !== "#" && (
+                        <a
+                          href={project.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="brutal-btn-outline flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center"
+                        >
+                          <Github size={14} /> Source
+                        </a>
+                      )}
+                      <a
+                        href={project.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="brutal-btn flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center"
+                      >
                         <ExternalLink size={14} /> Demo
                       </a>
                     </div>

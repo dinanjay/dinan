@@ -48,10 +48,22 @@ const Projects = () => {
                     ))}
                   </div>
                   <div className="flex gap-3">
-                    <a href={project.sourceUrl} className="brutal-btn-outline flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
-                      <Github size={14} /> Source
-                    </a>
-                    <a href={project.demoUrl} className="brutal-btn flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center">
+                    {project.sourceUrl && project.sourceUrl !== "#" && (
+                      <a
+                        href={project.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="brutal-btn-outline flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center"
+                      >
+                        <Github size={14} /> Source
+                      </a>
+                    )}
+                    <a
+                      href={project.demoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="brutal-btn flex items-center gap-2 !py-2 !px-4 text-sm flex-1 justify-center"
+                    >
                       <ExternalLink size={14} /> Demo
                     </a>
                   </div>
