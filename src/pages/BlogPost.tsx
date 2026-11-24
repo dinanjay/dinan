@@ -46,7 +46,9 @@ const BlogPost = () => {
               {tag}
             </span>
           ))}
-          <span className="text-sm text-muted-foreground font-mono ml-auto">{post.date}</span>
+          <span className="text-sm text-muted-foreground font-mono ml-auto">
+            {post.author ? `${post.author} · ${post.date}` : post.date}
+          </span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl font-bold mb-8">{post.title}</h1>

@@ -2,6 +2,8 @@ export interface BlogPost {
   slug: string;
   title: string;
   date: string;
+  author?: string;
+  category?: string;
   tags: string[];
   excerpt: string;
   coverImage: string;
@@ -68,13 +70,21 @@ function parseAllPosts(): BlogPost[] {
     const slug = path.split('/').pop()!.replace(/\.mdx$/, '');
     const { frontmatter, content } = parseFrontmatter(raw);
 
+    const rawCover = frontmatter.coverImage || '';
+    const coverImage =
+      rawCover.startsWith('http://') || rawCover.startsWith('https://') || rawCover.startsWith('/')
+        ? rawCover
+        : imageMap[rawCover] || '/placeholder.svg';
+
     posts.push({
       slug,
       title: frontmatter.title || '',
       date: frontmatter.date || '',
+      author: frontmatter.author || undefined,
+      category: frontmatter.category || undefined,
       tags: parseTags(frontmatter.tags || '[]'),
-      excerpt: frontmatter.excerpt || '',
-      coverImage: imageMap[frontmatter.coverImage] || '/placeholder.svg',
+      excerpt: frontmatter.excerpt || frontmatter.description || '',
+      coverImage,
       content,
     });
   }
